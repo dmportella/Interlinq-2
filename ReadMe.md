@@ -1,7 +1,7 @@
 InterLinq 2.
 ===
 
-This is InterLinq build by the guys at http://interlinq.codeplex.com/, currently the is not active anymore there so I have taken a cut of the source and modified adding support for Silverlight 4, http bindinds and fixing some small issues. 
+This is InterLinq built by the guys at http://interlinq.codeplex.com/, that project is not active anymore there so I have taken a cut of the source and modified adding support for Silverlight 4, http bindinds and fixing some small issues. 
 
 All features from the original project are still there bar few like the service type (remoting, their version of wcf service).
 
