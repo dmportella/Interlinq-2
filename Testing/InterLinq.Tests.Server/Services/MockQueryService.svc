@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="InterLinq.Tests.Server.Services.MockQueryService" Factory="InterLinq.Tests.Server.Services.MockServiceHostFactory" %>

@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C518D53E-34D1-46EF-AD26-411B02A4608B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>InterLinq.Tests</RootNamespace>
+    <AssemblyName>InterLinq.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Client\IMockClientContext.cs" />
+    <Compile Include="Client\MockClientContext.cs" />
+    <Compile Include="Client\MockClientExtensions.cs" />
+    <Compile Include="Server\MockQueryServiceClient.cs" />
+    <Compile Include="Server\Model\MockObjectRepository.cs" />
+    <Compile Include="Server\Model\MockQueryHandler.cs" />
+    <Compile Include="Server\Model\MockServerQueryHandler.cs" />
+    <Compile Include="ObjectDumper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SerializationTests.cs" />
+    <Compile Include="Service References\Server\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Server\InterLinq.Tests.Entities.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\Server\configuration.svcinfo" />
+    <None Include="Service References\Server\configuration91.svcinfo" />
+    <EmbeddedResource Include="..\..\GeneralLicense.txt">
+      <Link>Properties\GeneralLicense.txt</Link>
+    </EmbeddedResource>
+    <Content Include="Resources\Customers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\InterLinq.Objects\InterLinq.Objects.csproj">
+      <Project>{EFBC924D-DD86-4CB1-86F9-FA65817B8CB0}</Project>
+      <Name>InterLinq.Objects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\InterLinq\InterLinq.csproj">
+      <Project>{675F3E10-B4EA-4254-A068-107AAF02D093}</Project>
+      <Name>InterLinq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InterLinq.Tests.Entities\InterLinq.Tests.Entities.csproj">
+      <Project>{820A52E0-859B-4215-A892-8518211188FF}</Project>
+      <Name>InterLinq.Tests.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Service References\Server\server.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\service.wsdl" />
+    <None Include="Service References\Server\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\System.Linq.Expressions.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\System.Reflection.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\System.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\Server\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

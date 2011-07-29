@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="0bc06498-9610-44d6-a2fb-e7e7901f6c4b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:4483/Services/MockQueryService.svc/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="b5132d71-9d6b-4dce-a334-c7035aa6d8b1" SourceId="1" SourceUrl="http://localhost:4483/Services/MockQueryService.svc/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="6438ab2d-d3c2-4a5b-a6ec-4ef71f5be3c2" SourceId="1" SourceUrl="http://localhost:4483/Services/MockQueryService.svc/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="e9578993-a581-46a2-8377-6db99667b092" SourceId="1" SourceUrl="http://localhost:4483/Services/MockQueryService.svc/mex" />
+    <MetadataFile FileName="System.Linq.Expressions.xsd" MetadataType="Schema" ID="44410acd-1df3-48c6-b029-550ae169584d" SourceId="1" SourceUrl="http://localhost:4483/Services/MockQueryService.svc/mex" />
+    <MetadataFile FileName="System.Reflection.xsd" MetadataType="Schema" ID="7626f92f-1e99-4aa1-93db-e08bff82d1b3" SourceId="1" SourceUrl="http://localhost:4483/Services/MockQueryService.svc/mex" />
+    <MetadataFile FileName="System.xsd" MetadataType="Schema" ID="df83475a-98d4-4a0e-add4-fed4cab3cc76" SourceId="1" SourceUrl="http://localhost:4483/Services/MockQueryService.svc/mex" />
+    <MetadataFile FileName="InterLinq.Tests.Entities.xsd" MetadataType="Schema" ID="dd3572e8-88c0-46e6-8d63-e68ed2312067" SourceId="1" SourceUrl="http://localhost:4483/Services/MockQueryService.svc/mex" />
+    <MetadataFile FileName="server.xsd" MetadataType="Schema" ID="ccc4a753-4399-4adb-bb4c-fb494b71dc2f" SourceId="1" SourceUrl="http://localhost:4483/Services/MockQueryService.svc/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

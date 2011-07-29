@@ -1,0 +1,26 @@
+﻿@{
+    //Copyright © DMPortella.  All Rights Reserved.
+    //This code released under the terms of the 
+    //Microsoft Public License (MS-PL, http://opensource.org/licenses/ms-pl.html.)
+
+    //Copyright © DMPortella.  All Rights Reserved.
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>My ASP.NET Web Page - @Page.Title</title>
+    <link href="@Href("~/favicon.ico")" rel="shortcut icon" type="image/x-icon" />
+</head>
+<body>
+    <div id="main">
+        <div id="content">
+            <h1>@Page.Title</h1>
+            @RenderBody()
+        </div>
+        <div id="footer">
+            &copy; @DateTime.Now.Year - DMPortella
+        </div>
+    </div>
+</body>
+</html>
