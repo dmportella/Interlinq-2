@@ -46,8 +46,18 @@ namespace InterLinq.Types
         /// </summary> 
         public Type RepresentedType
         {
-            get { return Type.GetType(representedType); }
-            set { representedType = value.AssemblyQualifiedName; }
+            get
+            {
+#if !SILVERLIGHT
+                var tp = Type.GetType(representedType);
+                if (tp != null)
+                    return tp;
+                return System.AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).First(x => x.FullName == representedType);
+#else
+                return Type.GetType(representedType);
+#endif
+            }
+            set { representedType = value.FullName; } // AssemblyQualifiedName; }
         }
 
         /// <summary>
