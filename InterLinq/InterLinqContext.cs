@@ -69,5 +69,10 @@ namespace InterLinq
         {
             return this.QueryHandler.Get<T>(name, parameters);
         }
+
+        public IQueryable ExecuteMethod(Type type, string name, params System.Linq.Expressions.Expression[] parameters)
+        {
+            return this.QueryHandler.Get(type, name, parameters);
+        }
     }
 }
