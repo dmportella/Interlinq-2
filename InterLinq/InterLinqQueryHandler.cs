@@ -26,6 +26,7 @@ namespace InterLinq
 
         #region IQueryHandler Members
 
+        private Dictionary<Type, MethodInfo> genericMethodsCache1 = new Dictionary<Type, MethodInfo>();
         /// <summary>
         /// Returns an <see cref="IQueryable{T}"/>.
         /// </summary>
@@ -33,8 +34,14 @@ namespace InterLinq
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
         public IQueryable Get(Type type)
         {
-            MethodInfo getTableMethod = GetType().GetMethod("Get", new Type[] { });
-            MethodInfo genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
+            MethodInfo genericGetTableMethod;
+
+            if (!genericMethodsCache1.TryGetValue(type, out genericGetTableMethod))
+            {
+                MethodInfo getTableMethod = typeof (InterLinqQueryHandler).GetMethod("Get", new Type[] {});
+                genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
+                genericMethodsCache1.Add(type, genericGetTableMethod);
+            }
             return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { });
         }
 
@@ -68,6 +75,7 @@ namespace InterLinq
             return true;
         }
 
+        private Dictionary<Type, MethodInfo> genericMethodsCache2 = new Dictionary<Type, MethodInfo>();
         /// <summary>
         /// Returns a <see cref="IQueryable{T}"/>
         /// </summary>
@@ -77,9 +85,17 @@ namespace InterLinq
         /// <returns>Returns a <see cref="IQueryable{T}"/>.</returns>
         public virtual IQueryable Get(Type type, string name, params object[] parameters)
         {
-            MethodInfo getTableMethod = GetType().GetMethod("Get", new Type[] { typeof(Type), typeof(string), typeof(object[]) });
-            MethodInfo genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
-            return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { type, name, parameters });
+            MethodInfo genericGetTableMethod;
+
+            if (!genericMethodsCache2.TryGetValue(type, out genericGetTableMethod))
+            {
+                MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { typeof(string), typeof(object[]) });
+                //MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethods().FirstOrDefault(x=>x.Name=="Get" && x.IsGenericMethod && x.GetParameters().Count()==2);
+                genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
+                genericMethodsCache2.Add(type, genericGetTableMethod);
+            }
+
+            return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { name, parameters });
         }
 
         /// <summary>

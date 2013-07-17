@@ -15,14 +15,14 @@ namespace InterLinq
         /// </summary>
         /// <param name="type">Type of the returned <see cref="IQueryable{T}"/>.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        IQueryable Get(Type type);
+        //IQueryable Get(Type type);
 
         /// <summary>
         /// Returns an <see cref="IQueryable{T}"/>.
         /// </summary>
         /// <typeparam name="T">Generic Argument of the returned <see cref="IQueryable{T}"/>.</typeparam>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        IQueryable<T> Get<T>() where T : class;
+        //IQueryable<T> Get<T>() where T : class;
 
         /// <summary>
         /// Returns an <see cref="IQueryable{T}"/>.
