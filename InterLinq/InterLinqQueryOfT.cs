@@ -155,6 +155,8 @@ namespace InterLinq
         {
             IEnumerable retrievedObjects = (IEnumerable)provider.Execute(expression);
             object returnValue = TypeConverter.ConvertFromSerializable(typeof(IEnumerable<T>), retrievedObjects);
+            if (returnValue == null)
+                return (new List<T>()).GetEnumerator();
             return ((IEnumerable<T>)returnValue).GetEnumerator();
         }
 

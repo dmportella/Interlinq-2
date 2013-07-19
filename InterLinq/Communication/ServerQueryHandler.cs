@@ -168,9 +168,13 @@ namespace InterLinq.Communication
             {
                 QueryHandler.StartSession();
                 IQueryable<T> query = serializableExpression.Convert(QueryHandler) as IQueryable<T>;
-                var returnValue = query.ToArray();
-                object convertedReturnValue = TypeConverter.ConvertToSerializable(returnValue);
-                return convertedReturnValue;
+                if (query != null)
+                {
+                    var returnValue = query.ToArray();
+                    object convertedReturnValue = TypeConverter.ConvertToSerializable(returnValue);
+                    return convertedReturnValue;
+                }
+                return null;
             }
             catch
             {
