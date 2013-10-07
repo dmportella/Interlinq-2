@@ -19,6 +19,7 @@ namespace InterLinq.Types
     [KnownType(typeof(AnonymousMetaType))]
     public class InterLinqType : InterLinqMemberInfo
     {
+        private static Dictionary<string, Type> typeMap = new Dictionary<string, Type>();
 
         #region Properties
 
@@ -51,8 +52,24 @@ namespace InterLinq.Types
 #if !SILVERLIGHT
                 var tp = Type.GetType(representedType);
                 if (tp != null)
-                    return tp;
-                return System.AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).First(x => x.FullName == representedType);
+                   return tp;
+
+                typeMap.TryGetValue(representedType, out tp);
+                if (tp == null)
+                {
+                    lock (typeMap)
+                    {
+                        if (!typeMap.ContainsKey(representedType))
+                        {
+                            typeMap[representedType] =
+                                System.AppDomain.CurrentDomain.GetAssemblies()
+                                    .SelectMany(x => x.GetTypes())
+                                    .First(x => x.FullName == representedType);
+                        }
+                    }
+                }
+ 
+                return typeMap[representedType];                 
 #else
                 return Type.GetType(representedType);
 #endif
