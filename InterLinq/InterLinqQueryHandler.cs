@@ -60,9 +60,9 @@ namespace InterLinq
         /// </summary>
         /// <returns>True, if the session creation was successful. False, if not.</returns>
         /// <seealso cref="IQueryHandler.StartSession"/>
-        public virtual bool StartSession()
+        public virtual object StartSession()
         {
-            return true;
+            return new object();
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace InterLinq
         /// </summary>
         /// <returns>True, if the session closing was successful. False, if not.</returns>
         /// <seealso cref="IQueryHandler.CloseSession"/>
-        public virtual bool CloseSession()
+        public virtual bool CloseSession(object sessionObject)
         {
             return true;
         }
@@ -83,19 +83,19 @@ namespace InterLinq
         /// <param name="name">The name of the query.</param>
         /// <param name="parameters">Parameters for the quey.</param>
         /// <returns>Returns a <see cref="IQueryable{T}"/>.</returns>
-        public virtual IQueryable Get(Type type, string name, params object[] parameters)
+        public virtual IQueryable Get(Type type, string name, object sessionObject, params object[] parameters)
         {
             MethodInfo genericGetTableMethod;
 
             if (!genericMethodsCache2.TryGetValue(type, out genericGetTableMethod))
             {
-                MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { typeof(string), typeof(object[]) });
+                MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { typeof(string), typeof(object), typeof(object[]) });
                 //MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethods().FirstOrDefault(x=>x.Name=="Get" && x.IsGenericMethod && x.GetParameters().Count()==2);
                 genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
                 genericMethodsCache2.Add(type, genericGetTableMethod);
             }
 
-            return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { name, parameters });
+            return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { name, sessionObject, parameters });
         }
 
         /// <summary>
@@ -105,9 +105,9 @@ namespace InterLinq
         /// <param name="name">The name of the query.</param>
         /// <param name="parameters">Parameters for the quey.</param>
         /// <returns>Returns a <see cref="IQueryable{T}"/>.</returns>
-        public virtual IQueryable<T> Get<T>(string name, params object[] parameters) where T : class
+        public virtual IQueryable<T> Get<T>(string name, object sessionObject, params object[] parameters) where T : class
         {
-            return new InterLinqQuery<T>(QueryProvider, null, name, parameters);               
+            return new InterLinqQuery<T>(QueryProvider, null, name, sessionObject, parameters);               
         }
 
         #endregion

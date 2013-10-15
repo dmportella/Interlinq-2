@@ -164,10 +164,11 @@ namespace InterLinq.Communication
         /// </remarks>
         public object RetrieveGeneric<T>(SerializableExpression serializableExpression)
         {
+            object session = null;
             try
             {
-                QueryHandler.StartSession();
-                IQueryable<T> query = serializableExpression.Convert(QueryHandler) as IQueryable<T>;
+                session = QueryHandler.StartSession();
+                IQueryable<T> query = serializableExpression.Convert(QueryHandler, session) as IQueryable<T>;
                 if (query != null)
                 {
                     var returnValue = query.ToArray();
@@ -182,7 +183,7 @@ namespace InterLinq.Communication
             }
             finally
             {
-                QueryHandler.CloseSession();
+                QueryHandler.CloseSession(session);
             }
         }
 
@@ -224,10 +225,11 @@ namespace InterLinq.Communication
         /// <seealso cref="IQueryRemoteHandler.Retrieve"/>
         public object RetrieveNonGenericObject(SerializableExpression serializableExpression)
         {
+            object session = null;
             try
             {
-                QueryHandler.StartSession();
-                object returnValue = serializableExpression.Convert(QueryHandler);
+                session = QueryHandler.StartSession();
+                object returnValue = serializableExpression.Convert(QueryHandler, session);
                 object convertedReturnValue = TypeConverter.ConvertToSerializable(returnValue);
                 return convertedReturnValue;
             }
@@ -237,7 +239,7 @@ namespace InterLinq.Communication
             }
             finally
             {
-                QueryHandler.CloseSession();
+                QueryHandler.CloseSession(session);
             }
         }
 

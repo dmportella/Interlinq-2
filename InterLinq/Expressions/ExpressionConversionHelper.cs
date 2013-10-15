@@ -70,9 +70,9 @@ namespace InterLinq.Expressions
         /// <param name="exp">Extended class instance.</param>
         /// <param name="linqHandler"><see cref="IQueryHandler"/>.</param>
         /// <returns>Returns the result of the executed <see cref="SerializableExpression"/>.</returns>
-        public static object Convert(this SerializableExpression exp, IQueryHandler linqHandler)
+        public static object Convert(this SerializableExpression exp, IQueryHandler linqHandler, object sessionObject)
         {
-            return new SerializableExpressionConverter(exp, linqHandler).Visit();
+            return new SerializableExpressionConverter(exp, linqHandler).Visit(sessionObject);
         }
 
     }

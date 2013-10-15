@@ -287,7 +287,7 @@ namespace InterLinq.Expressions.Helpers
         /// </summary>
         /// <param name="expression"><see cref="SerializableConstantExpression"/> to convert.</param>
         /// <returns>Returns the result of a <see cref="SerializableConstantExpression"/>.</returns>
-        protected override object GetResultConstantExpression(SerializableConstantExpression expression)
+        protected override object GetResultConstantExpression(SerializableConstantExpression expression, object sessionObject)
         {
             if (expression.Value == null)
             {
@@ -299,7 +299,7 @@ namespace InterLinq.Expressions.Helpers
                 
                 Type type = ((InterLinqQueryBase)expression.Value).ElementType;
 
-                return QueryHandler.Get(type, baseQuery.QueryName, (!string.IsNullOrEmpty(baseQuery.QueryName) && baseQuery.QueryParameters != null && baseQuery.QueryParameters.Count != 0) ? baseQuery.QueryParameters.Select(s => VisitResult(s)).ToArray() : null);
+                return QueryHandler.Get(type, baseQuery.QueryName, sessionObject, (!string.IsNullOrEmpty(baseQuery.QueryName) && baseQuery.QueryParameters != null && baseQuery.QueryParameters.Count != 0) ? baseQuery.QueryParameters.Select(s => VisitResult(s, sessionObject)).ToArray() : null);
             }
             return expression.Value;
         }
@@ -309,9 +309,9 @@ namespace InterLinq.Expressions.Helpers
         /// </summary>
         /// <param name="expression"><see cref="SerializableMethodCallExpression"/> to convert.</param>
         /// <returns>Returns the result of a <see cref="SerializableMethodCallExpression"/>.</returns>
-        protected override object GetResultMethodCallExpression(SerializableMethodCallExpression expression)
+        protected override object GetResultMethodCallExpression(SerializableMethodCallExpression expression, object sessionObject)
         {
-            return InvokeMethodCall(expression);
+            return InvokeMethodCall(expression, sessionObject);
         }
 
         #endregion
@@ -323,7 +323,7 @@ namespace InterLinq.Expressions.Helpers
         /// </summary>
         /// <param name="ex"><see cref="SerializableMethodCallExpression"/> to invoke.</param>
         /// <returns>Returns the return value of the method call in <paramref name="ex"/>.</returns>
-        protected object InvokeMethodCall(SerializableMethodCallExpression ex)
+        protected object InvokeMethodCall(SerializableMethodCallExpression ex, object sessionObject)
         {
             if (ex.Method.DeclaringType.GetClrVersion() == typeof(Queryable))
             {
@@ -339,7 +339,7 @@ namespace InterLinq.Expressions.Helpers
                     }
                     else
                     {
-                        args.Add(VisitResult(currentArg));
+                        args.Add(VisitResult(currentArg, sessionObject));
                     }
                 }
                 return ((MethodInfo)ex.Method.GetClrVersion()).Invoke(ex.Object, args.ToArray());

@@ -86,13 +86,13 @@ namespace InterLinq.NHibernate
         /// </summary>
         /// <returns>True, if the session creation was successful. False, if not.</returns>
         /// <seealso cref="IQueryHandler.StartSession"/>
-        public bool StartSession()
+        public object StartSession()
         {
-            if (currentSession == null)
-            {
-                currentSession = sessionFactory.OpenSession();
-            }
-            return true;
+            //if (currentSession == null)
+            //{
+            //    currentSession = sessionFactory.OpenSession();
+            //}
+            return currentSession;
         }
 
         /// <summary>
@@ -100,12 +100,14 @@ namespace InterLinq.NHibernate
         /// </summary>
         /// <returns>True, if the session closing was successful. False, if not.</returns>
         /// <seealso cref="IQueryHandler.CloseSession"/>
-        public bool CloseSession()
+        public bool CloseSession(object sessionObject)
         {
+            var currentSession = sessionObject as ISession;
+
             if (currentSession != null)
             {
                 currentSession.Close();
-                currentSession = null;
+                //currentSession = null;
             }
             return true;
         }
@@ -120,7 +122,7 @@ namespace InterLinq.NHibernate
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        public IQueryable Get(Type type, string queryName, params object[] parameters)
+        public IQueryable Get(Type type, string queryName, object sessionObject, params object[] parameters)
         {// TODO  must implement named queries on NHibernate
             throw new NotImplementedException("NOT IMPLEMENTED YET On NHibernate");
         }
@@ -132,7 +134,7 @@ namespace InterLinq.NHibernate
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        public IQueryable<T> Get<T>(string queryName, params object[] parameters) where T : class
+        public IQueryable<T> Get<T>(string queryName, object sessionObject, params object[] parameters) where T : class
         {// TODO  must implement named queries on NHibernate
             throw new NotImplementedException("NOT IMPLEMENTED YET On NHibernate");
         }

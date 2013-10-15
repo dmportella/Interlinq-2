@@ -67,12 +67,12 @@ namespace InterLinq
         /// <returns>The result of the query.</returns>
         public IQueryable<T> ExecuteMethod<T>(string name, params System.Linq.Expressions.Expression[] parameters) where T: class
         {
-            return this.QueryHandler.Get<T>(name, parameters);
+            return this.QueryHandler.Get<T>(name, null, parameters);
         }
 
         public IQueryable ExecuteMethod(Type type, string name, params System.Linq.Expressions.Expression[] parameters)
         {
-            return this.QueryHandler.Get(type, name, parameters);
+            return this.QueryHandler.Get(type, name, null, parameters);
         }
     }
 }

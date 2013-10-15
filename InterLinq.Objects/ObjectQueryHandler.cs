@@ -64,9 +64,9 @@ namespace InterLinq.Objects
         /// </summary>
         /// <returns>True, if the session creation was successful. False, if not.</returns>
         /// <seealso cref="IQueryHandler.StartSession"/>
-        public bool StartSession()
+        public object StartSession()
         {
-            return true;
+            return new object();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace InterLinq.Objects
         /// </summary>
         /// <returns>True, if the session closing was successful. False, if not.</returns>
         /// <seealso cref="IQueryHandler.CloseSession"/>
-        public bool CloseSession()
+        public bool CloseSession(object sessionObject)
         {
             return true;
         }
@@ -88,7 +88,7 @@ namespace InterLinq.Objects
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        public IQueryable Get(Type type, string queryName, params object[] parameters)
+        public IQueryable Get(Type type, string queryName, object sessionObject, params object[] parameters)
         {
             MethodInfo getTableMethod = GetType().GetMethod("Get", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(string), typeof(object[]) }, null);
             MethodInfo genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
@@ -102,7 +102,7 @@ namespace InterLinq.Objects
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        public IQueryable<T> Get<T>(string queryName, params object[] parameters) where T : class
+        public IQueryable<T> Get<T>(string queryName, object sessionObject, params object[] parameters) where T : class
         {
             return this.objectSource.GetObjects<T>(queryName, parameters).AsQueryable();
         }
