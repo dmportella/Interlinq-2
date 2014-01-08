@@ -67,6 +67,20 @@ namespace InterLinq.Types.Anonymous
         }
 
         /// <summary>
+        /// Returns true if the given <see cref="Type"/> is a <see cref="IGrouping{TKey, TElement}"/> class.
+        /// </summary>
+        /// <param name="t"><see cref="Type"/> to test.</param>
+        /// <returns>Returns true if the given <see cref="Type"/> is a <see cref="IGrouping{TKey, TElement}"/> class.</returns>
+        public static bool IsIGroupingArray(this Type t)
+        {
+            if (!t.IsArray)
+            {
+                return false;
+            }
+            return t.GetElementType().IsIGrouping();
+        }
+
+        /// <summary>
         /// Returns true if the given <see cref="Type"/> is a <see cref="IEnumerator{t}"/> class.
         /// </summary>
         /// <param name="t"><see cref="Type"/> to test.</param>

@@ -40,6 +40,19 @@ namespace InterLinq.Types
                 
                 return method.Invoke(null, new[] { wantedType, objectToConvert });
             }
+
+            if (wantedType.IsIGroupingArray() && objectToConvert is InterLinqGroupingBase)
+            {
+                Type[] genericType = objectToConvert.GetType().GetGenericArguments();
+#if !SILVERLIGHT
+                MethodInfo method = typeof(TypeConverter).GetMethod("ConvertFromInterLinqGroupingArray", BindingFlags.NonPublic | BindingFlags.Static).MakeGenericMethod(genericType);
+#else
+				MethodInfo method = typeof(TypeConverter).GetMethod("ConvertFromInterLinqGroupingArray", BindingFlags.Public | BindingFlags.Static).MakeGenericMethod(genericType);
+#endif
+
+                return method.Invoke(null, new[] { wantedType, objectToConvert });
+            }
+
             Type wantedElementType = InterLinqTypeSystem.FindIEnumerable(wantedType);
             if (wantedElementType != null && wantedElementType.GetGenericArguments()[0].IsAnonymous())
             {
@@ -111,6 +124,18 @@ namespace InterLinq.Types
             return newGrouping;
         }
 
+        private static object ConvertFromInterLinqGroupingArray<TKey, TElement>(Type wantedType, InterLinqGrouping<TKey, TElement>[] grouping)
+        {
+            var retVal = new List<InterLinqGroupingBase>();
+            var tp = wantedType.GetElementType();
+            foreach (var interLinqGrouping in grouping)
+            {
+                retVal.Add((InterLinqGroupingBase) ConvertFromInterLinqGrouping(tp, interLinqGrouping));
+
+            }
+            return retVal.ToArray();
+        }
+
 		/// <summary>
         /// Converts each element of an <see cref="IEnumerable"/> 
         /// into a target <see cref="Type"/>.
@@ -149,6 +174,18 @@ namespace InterLinq.Types
             newGrouping.SetKey(key);
             newGrouping.SetElements(elements);
             return newGrouping;
+        }
+
+        public static object ConvertFromInterLinqGroupingArray<TKey, TElement>(Type wantedType, InterLinqGrouping<TKey, TElement>[] grouping)
+        {
+            var retVal = new List<InterLinqGroupingBase>();
+            var tp = wantedType.GetElementType();
+            foreach (var interLinqGrouping in grouping)
+            {
+                retVal.Add((InterLinqGroupingBase) ConvertFromInterLinqGrouping(tp, interLinqGrouping));
+
+            }
+            return retVal.ToArray();
         }
 
 		/// <summary>
@@ -201,6 +238,19 @@ namespace InterLinq.Types
 #endif
                 return method.Invoke(null, new[] { objectToConvert });
             }
+
+            // Handle "IGrouping<TKey, TElement>[]"
+            if (typeOfObject.IsIGroupingArray())
+            {
+                Type[] genericType = typeOfObject.GetGenericArguments();
+#if !SILVERLIGHT
+                MethodInfo method = typeof(TypeConverter).GetMethod("ConvertToInterLinqGroupingArray", BindingFlags.NonPublic | BindingFlags.Static).MakeGenericMethod(genericType);
+#else
+				MethodInfo method = typeof(TypeConverter).GetMethod("ConvertToInterLinqGroupingArray", BindingFlags.Public | BindingFlags.Static).MakeGenericMethod(genericType);
+#endif
+                return method.Invoke(null, new[] { objectToConvert });
+            }
+
             // Handle "IEnumerable<AnonymousType>" / "IEnumerator<T>"
             if (elementType != null && elementType.GetGenericArguments()[0].IsAnonymous() || typeOfObject.IsEnumerator())
             {
@@ -243,6 +293,17 @@ namespace InterLinq.Types
             return newGrouping;
         }
 
+        private static object ConvertToInterLinqGroupingArray<TKey, TElement>(IGrouping<TKey, TElement>[] grouping)
+        {
+            var retVal = new List<InterLinqGrouping<TKey, TElement>>();
+            foreach (var g in grouping)
+            {
+                retVal.Add((InterLinqGrouping<TKey, TElement>)ConvertToInterLinqGrouping(g));
+            }
+
+            return retVal.ToArray();
+        }
+
         /// <summary>
         /// Converts each element of an <see cref="IEnumerable"/> to 
         /// an <see cref="IEnumerable{AnonymousObject}"/> 
@@ -281,6 +342,17 @@ namespace InterLinq.Types
             newGrouping.SetKey(key);
             newGrouping.SetElements(elements);
             return newGrouping;
+        }
+
+        public static object ConvertToInterLinqGroupingArray<TKey, TElement>(IGrouping<TKey, TElement>[] grouping)
+        {
+            var retVal = new List<InterLinqGrouping<TKey, TElement>>();
+            foreach (var g in grouping)
+            {
+                retVal.Add((InterLinqGrouping<TKey, TElement>) ConvertToInterLinqGrouping(g));
+            }
+
+            return retVal.ToArray();
         }
 
         /// <summary>
