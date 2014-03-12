@@ -60,6 +60,8 @@ namespace InterLinq.Communication
             types.Add(typeof(System.Reflection.MethodBase));
             types.Add(typeof(System.Reflection.MemberInfo));
             types.Add(typeof(System.Exception));
+            types.Add(typeof(object[]));
+			types.Add(typeof(InterLinq.InterLinqQuery<string>));
 
             _knownTypes = types.ToArray();
         }

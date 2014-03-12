@@ -77,7 +77,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Server\InterLinq.Tests.Entities.xsd">
+    <None Include="Service References\Server\Arrays1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\InterLinq.Tests.Entities1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\Server\Reference.svcmap">
@@ -90,6 +93,25 @@
       <Link>Properties\GeneralLicense.txt</Link>
     </EmbeddedResource>
     <Content Include="Resources\Customers.xml" />
+    <None Include="Service References\Server\server1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\service1.wsdl" />
+    <None Include="Service References\Server\service2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\service21.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\System.Linq.Expressions1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\System.Reflection1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Server\System1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\InterLinq.Objects\InterLinq.Objects.csproj">
@@ -110,25 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Service References\Server\server.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Server\service.wsdl" />
-    <None Include="Service References\Server\service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Server\service1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Server\System.Linq.Expressions.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Server\System.Reflection.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\Server\System.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\Server\" />

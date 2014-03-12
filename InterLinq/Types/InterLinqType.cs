@@ -64,7 +64,7 @@ namespace InterLinq.Types
                             typeMap[representedType] =
                                 System.AppDomain.CurrentDomain.GetAssemblies()
                                     .SelectMany(x => x.GetTypes())
-                                    .First(x => x.FullName == representedType);
+                                    .FirstOrDefault(x => x.FullName == representedType);
                         }
                     }
                 }
