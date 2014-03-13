@@ -28,6 +28,13 @@ namespace InterLinq
         { get; set; }
 
         /// <summary>
+        /// The name of the query. Used for named queries on the server.
+        /// </summary>
+        [DataMember()]
+        public object AdditionalObject
+        { get; set; }
+
+        /// <summary>
         /// The parameters for the query. User for named queries on the server.
         /// </summary>
         [DataMember(Order = 1)]

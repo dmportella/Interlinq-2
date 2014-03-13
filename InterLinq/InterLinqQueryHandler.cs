@@ -83,7 +83,7 @@ namespace InterLinq
         /// <param name="name">The name of the query.</param>
         /// <param name="parameters">Parameters for the quey.</param>
         /// <returns>Returns a <see cref="IQueryable{T}"/>.</returns>
-        public virtual IQueryable Get(Type type, string name, object sessionObject, params object[] parameters)
+        public virtual IQueryable Get(Type type, object additionalObject, string name, object sessionObject, params object[] parameters)
         {
             MethodInfo genericGetTableMethod;
 
@@ -105,7 +105,7 @@ namespace InterLinq
         /// <param name="name">The name of the query.</param>
         /// <param name="parameters">Parameters for the quey.</param>
         /// <returns>Returns a <see cref="IQueryable{T}"/>.</returns>
-        public virtual IQueryable<T> Get<T>(string name, object sessionObject, params object[] parameters) where T : class
+        public virtual IQueryable<T> Get<T>(object additionalObject, string name, object sessionObject, params object[] parameters) where T : class
         {
             return new InterLinqQuery<T>(QueryProvider, null, name, sessionObject, parameters);               
         }

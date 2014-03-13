@@ -39,22 +39,22 @@ namespace InterLinq.Tests.Client
 
         public IQueryable<Entities.Supplier> Suppliers
         {
-            get { return this.QueryHandler.Get<Entities.Supplier>(null, null); }
+            get { return this.QueryHandler.Get<Entities.Supplier>(null, null, null); }
         }
 
         public IQueryable<Entities.Customer> Customers
         {
-            get { return this.QueryHandler.Get<Entities.Customer>(null, null); }
+            get { return this.QueryHandler.Get<Entities.Customer>(null, null, null); }
         }
 
         public IQueryable<Entities.Product> Products
         {
-            get { return this.QueryHandler.Get<Entities.Product>(null, null); }
+            get { return this.QueryHandler.Get<Entities.Product>(null, null, null); }
         }
 
         public IQueryable<string> Digits
         {
-            get { return this.QueryHandler.Get<string>(null, null); }
+            get { return this.QueryHandler.Get<string>(null, null, null); }
         }
 
         public IQueryable<Entities.Customer> CustomersByCity(string cityName)

@@ -31,7 +31,7 @@ namespace InterLinq
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        IQueryable Get(Type type, string queryName, object sessionObject, params object[] parameters);
+        IQueryable Get(Type type, object additionalObject, string queryName, object sessionObject, params object[] parameters);
 
         /// <summary>
         /// Returns an <see cref="IQueryable{T}"/>.
@@ -40,7 +40,7 @@ namespace InterLinq
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        IQueryable<T> Get<T>(string queryName, object sessionObject, params object[] parameters) where T : class;
+        IQueryable<T> Get<T>(object additionalObject, string queryName, object sessionObject, params object[] parameters) where T : class;
 
         /// <summary>
         /// Tells the <see cref="IQueryHandler"/> to start a new the session.

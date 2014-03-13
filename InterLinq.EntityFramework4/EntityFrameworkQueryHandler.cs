@@ -92,13 +92,13 @@ namespace InterLinq.EntityFramework4
 
         #endregion
 
-        public IQueryable Get(Type type, string queryName, object sessionObject, params object[] parameters)
+        public IQueryable Get(Type type, object additionalObject, string queryName, object sessionObject, params object[] parameters)
         {
             MethodInfo genericGetTableMethod = getNamedQueryMethod.MakeGenericMethod(type);
             return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { queryName, parameters });
         }
 
-        public IQueryable<T> Get<T>(string queryName, object sessionObject, params object[] parameters) where T : class
+        public IQueryable<T> Get<T>(object additionalObject, string queryName, object sessionObject, params object[] parameters) where T : class
         {
             return this.objectContext.ExecuteStoreQuery<T>(queryName, parameters).AsQueryable();
         }

@@ -87,7 +87,7 @@ namespace InterLinq.Sql
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        public IQueryable Get(Type type, string queryName, object sessionObject, params object[] parameters)
+        public IQueryable Get(Type type, object additionalObject, string queryName, object sessionObject, params object[] parameters)
         {// TODO  must implement named queries on linq to sql
             throw new NotImplementedException("NOT IMPLEMENTED YET On linq to sql");
         }
@@ -99,7 +99,7 @@ namespace InterLinq.Sql
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        public IQueryable<T> Get<T>(string queryName, object sessionObject, params object[] parameters) where T : class
+        public IQueryable<T> Get<T>(object additionalObject, string queryName, object sessionObject, params object[] parameters) where T : class
         {// TODO  must implement named queries on linq to sql
             throw new NotImplementedException("NOT IMPLEMENTED YET On linq to sql");
         }

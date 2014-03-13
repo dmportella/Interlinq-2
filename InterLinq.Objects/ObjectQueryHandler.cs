@@ -88,11 +88,11 @@ namespace InterLinq.Objects
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        public IQueryable Get(Type type, string queryName, object sessionObject, params object[] parameters)
+        public IQueryable Get(Type type, object additionalObject, string queryName, object sessionObject, params object[] parameters)
         {
             MethodInfo getTableMethod = GetType().GetMethod("Get", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(string), typeof(object[]) }, null);
             MethodInfo genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
-            return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { queryName, parameters });
+            return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { additionalObject, queryName, parameters });
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace InterLinq.Objects
         /// <param name="queryName">The named query to call.</param>
         /// <param name="parameters">The parameters of the named query.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        public IQueryable<T> Get<T>(string queryName, object sessionObject, params object[] parameters) where T : class
+        public IQueryable<T> Get<T>(object additionalObject, string queryName, object sessionObject, params object[] parameters) where T : class
         {
             return this.objectSource.GetObjects<T>(queryName, parameters).AsQueryable();
         }
