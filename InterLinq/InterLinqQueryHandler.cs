@@ -89,13 +89,13 @@ namespace InterLinq
 
             if (!genericMethodsCache2.TryGetValue(type, out genericGetTableMethod))
             {
-                MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { typeof(string), typeof(object), typeof(object[]) });
+                MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { typeof(object), typeof(string), typeof(object), typeof(object[]) });
                 //MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethods().FirstOrDefault(x=>x.Name=="Get" && x.IsGenericMethod && x.GetParameters().Count()==2);
                 genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
                 genericMethodsCache2.Add(type, genericGetTableMethod);
             }
 
-            return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { name, sessionObject, parameters });
+            return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { additionalObject, name, sessionObject, parameters });
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace InterLinq
         /// <returns>Returns a <see cref="IQueryable{T}"/>.</returns>
         public virtual IQueryable<T> Get<T>(object additionalObject, string name, object sessionObject, params object[] parameters) where T : class
         {
-            return new InterLinqQuery<T>(QueryProvider, null, name, sessionObject, parameters);               
+            return new InterLinqQuery<T>(QueryProvider, null, additionalObject, name, sessionObject, parameters);               
         }
 
         #endregion

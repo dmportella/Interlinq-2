@@ -46,7 +46,7 @@ namespace InterLinq
         /// <param name="provider"><see cref="IQueryProvider"/> to set.</param>
         public InterLinqQuery(IQueryProvider provider)
         {
-            Initialize(provider, Expression.Constant(this), null);
+            Initialize(provider, Expression.Constant(this), null, null);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace InterLinq
         /// <param name="expression"><see cref="Expression"/> to set.</param>
         public InterLinqQuery(IQueryProvider provider, Expression expression)
         {
-            Initialize(provider, expression, null);
+            Initialize(provider, expression, null, null);
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace InterLinq
         /// <param name="expr"><see cref="Expression"/> to set.</param>
         /// <param name="queryName">The Query name. This cant be null.</param>
         /// <param name="parameters">The parameters for the query. Dont pass anything here is the named query has no parameters.</param>
-        public InterLinqQuery(IQueryProvider iQueryProvider, Expression expr, string queryName, params object[] parameters)
+        public InterLinqQuery(IQueryProvider iQueryProvider, Expression expr, object additionalObject, string queryName, params object[] parameters)
         {
-            Initialize(iQueryProvider, expr ?? Expression.Constant(this), queryName, parameters);
+            Initialize(iQueryProvider, expr ?? Expression.Constant(this), additionalObject, queryName, parameters);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace InterLinq
         /// <param name="expr"><see cref="Expression"/> to set.</param>
         /// <param name="queryName">The Query name. This cant be null.</param>
         /// <param name="parameters">The parameters for the query. Dont pass anything here is the named query has no parameters.</param>
-        private void Initialize(IQueryProvider iQueryProvider, Expression expr, string queryName, params object[] parameters)
+        private void Initialize(IQueryProvider iQueryProvider, Expression expr, object additionalObject, string queryName, params object[] parameters)
         {
             if (iQueryProvider == null)
             {
@@ -118,6 +118,7 @@ namespace InterLinq
             expression = expr;
             elementType = typeof(T);
             elementInterLinqType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(elementType);
+            AdditionalObject = additionalObject;
             QueryName = queryName;
             QueryParameters = (parameters != null && parameters.Count() != 0) ? new List<SerializableExpression>(parameters.Select(s => System.Linq.Expressions.Expression.Constant(s).MakeSerializable()).ToArray()) : null;
         }
