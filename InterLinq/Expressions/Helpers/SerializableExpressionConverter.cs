@@ -81,6 +81,13 @@ namespace InterLinq.Expressions.Helpers
         {
             if (expression.Value != null)
             {
+                var t = expression.Value.GetType();
+                if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof (InterLinqQuery<>))
+                {
+                    var qry = expression.Value as InterLinqQueryBase;
+                    var newQry = this.QueryHandler.Get(qry.ElementType, qry.AdditionalObject, qry.QueryName, sessionObject, qry.Parameters);
+                    return Expression.Constant(newQry);
+                }
                 return Expression.Constant(expression.Value, expression.Type.GetClrVersion() as Type);
             }
             return Expression.Constant(null, (Type)expression.Type.GetClrVersion());
@@ -281,7 +288,7 @@ namespace InterLinq.Expressions.Helpers
         #endregion
 
         #region Get result
-
+     
         /// <summary>
         /// Executes a <see cref="SerializableConstantExpression"/> and returns the result.
         /// </summary>
@@ -330,6 +337,8 @@ namespace InterLinq.Expressions.Helpers
         /// <returns>Returns the return value of the method call in <paramref name="ex"/>.</returns>
         protected object InvokeMethodCall(SerializableMethodCallExpression ex, object sessionObject)
         {
+            this.sessionObject = sessionObject;
+
             if (ex.Method.DeclaringType.GetClrVersion() == typeof(Queryable))
             {
                 List<object> args = new List<object>();
@@ -347,8 +356,15 @@ namespace InterLinq.Expressions.Helpers
                         args.Add(VisitResult(currentArg, sessionObject));
                     }
                 }
-                return ((MethodInfo)ex.Method.GetClrVersion()).Invoke(ex.Object, args.ToArray());
+
+                var ret = ((MethodInfo) ex.Method.GetClrVersion()).Invoke(ex.Object, args.ToArray());
+
+                this.sessionObject = null;
+
+                return ret;
             }
+
+            this.sessionObject = null;
 
             // If the method is not of DeclaringType "Queryable", it mustn't be invoked.
             // Without this check, we were able to delete files from the server disk

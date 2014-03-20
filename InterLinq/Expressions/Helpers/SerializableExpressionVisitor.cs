@@ -243,6 +243,7 @@ namespace InterLinq.Expressions.Helpers
 
         #endregion
 
+        protected object sessionObject;
         /// <summary>
         /// Returns the value of the <see cref="Expression"/>.
         /// </summary>
@@ -274,6 +275,7 @@ namespace InterLinq.Expressions.Helpers
                 throw new NotImplementedException();
             }
             convertedObjects[expression.HashCode] = foundObject;
+
             return foundObject;
         }
 
