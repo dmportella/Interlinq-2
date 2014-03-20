@@ -120,7 +120,15 @@ namespace InterLinq
             elementInterLinqType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(elementType);
             AdditionalObject = additionalObject;
             QueryName = queryName;
-            QueryParameters = (parameters != null && parameters.Count() != 0) ? new List<SerializableExpression>(parameters.Select(s => System.Linq.Expressions.Expression.Constant(s).MakeSerializable()).ToArray()) : null;
+
+            if (!string.IsNullOrEmpty(queryName))
+                QueryParameters = (parameters != null && parameters.Count() != 0)
+                    ? new List<SerializableExpression>(
+                        parameters.Select(s => System.Linq.Expressions.Expression.Constant(s).MakeSerializable())
+                            .ToArray())
+                    : null;
+            else
+                Parameters = parameters;
         }
 
         #endregion

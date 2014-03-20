@@ -299,7 +299,12 @@ namespace InterLinq.Expressions.Helpers
                 
                 Type type = ((InterLinqQueryBase)expression.Value).ElementType;
 
-                return QueryHandler.Get(type, baseQuery.AdditionalObject, baseQuery.QueryName, sessionObject, (!string.IsNullOrEmpty(baseQuery.QueryName) && baseQuery.QueryParameters != null && baseQuery.QueryParameters.Count != 0) ? baseQuery.QueryParameters.Select(s => VisitResult(s, sessionObject)).ToArray() : null);
+                return QueryHandler.Get(type, baseQuery.AdditionalObject, baseQuery.QueryName, sessionObject,
+                    (!string.IsNullOrEmpty(baseQuery.QueryName) && baseQuery.QueryParameters != null &&
+                     baseQuery.QueryParameters.Count != 0)
+                        ? baseQuery.QueryParameters.Select(s => VisitResult(s, sessionObject)).ToArray()
+                        : baseQuery.Parameters);
+                //return QueryHandler.Get(type, baseQuery.AdditionalObject, baseQuery.QueryName, sessionObject, (!string.IsNullOrEmpty(baseQuery.QueryName) && baseQuery.QueryParameters != null && baseQuery.QueryParameters.Count != 0) ? baseQuery.QueryParameters.Select(s => VisitResult(s, sessionObject)).ToArray() : null);
             }
             return expression.Value;
         }

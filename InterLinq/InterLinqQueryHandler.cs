@@ -107,7 +107,7 @@ namespace InterLinq
         /// <returns>Returns a <see cref="IQueryable{T}"/>.</returns>
         public virtual IQueryable<T> Get<T>(object additionalObject, string name, object sessionObject, params object[] parameters) where T : class
         {
-            return new InterLinqQuery<T>(QueryProvider, null, additionalObject, name, sessionObject, parameters);               
+            return new InterLinqQuery<T>(QueryProvider, null, additionalObject, name, parameters);               
         }
 
         #endregion

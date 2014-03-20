@@ -41,6 +41,13 @@ namespace InterLinq
         public List<SerializableExpression> QueryParameters
         { get; set; }
 
+        /// <summary>
+        /// The parameters for the query.
+        /// </summary>
+        [DataMember(Order = 1)]
+        public object[] Parameters
+        { get; set; }
+
         #region Property ElementType
 
         /// <summary>
