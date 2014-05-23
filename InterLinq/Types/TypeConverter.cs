@@ -12,7 +12,11 @@ namespace InterLinq.Types
     /// several static methods to convert <see cref="AnonymousObject"/> to
     /// C# Anonymous Types and back.
     /// </summary>
+#if SILVERLIGHT
+    public class TypeConverter
+#else
     internal class TypeConverter
+#endif
     {
 
         #region Convert AnonymousObject To C# Anonymous Type
