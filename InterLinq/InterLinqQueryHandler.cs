@@ -14,6 +14,14 @@ namespace InterLinq
     /// <seealso cref="IQueryHandler"/>
     public abstract class InterLinqQueryHandler : IQueryHandler
     {
+        protected static MethodInfo getTableMethodWithoutPara;
+        protected static MethodInfo getTableMethod;
+
+        static InterLinqQueryHandler()
+        {
+            getTableMethodWithoutPara = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { });
+            getTableMethod = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { typeof(object), typeof(string), typeof(object), typeof(object[]) });    
+        }
 
         #region Fields
 
@@ -38,8 +46,7 @@ namespace InterLinq
 
             if (!genericMethodsCache1.TryGetValue(type, out genericGetTableMethod))
             {
-                MethodInfo getTableMethod = typeof (InterLinqQueryHandler).GetMethod("Get", new Type[] {});
-                genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
+                genericGetTableMethod = getTableMethodWithoutPara.MakeGenericMethod(type);
                 genericMethodsCache1.Add(type, genericGetTableMethod);
             }
             return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { });
@@ -89,8 +96,6 @@ namespace InterLinq
 
             if (!genericMethodsCache2.TryGetValue(type, out genericGetTableMethod))
             {
-                MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { typeof(object), typeof(string), typeof(object), typeof(object[]) });
-                //MethodInfo getTableMethod = typeof(InterLinqQueryHandler).GetMethods().FirstOrDefault(x=>x.Name=="Get" && x.IsGenericMethod && x.GetParameters().Count()==2);
                 genericGetTableMethod = getTableMethod.MakeGenericMethod(type);
                 genericMethodsCache2.Add(type, genericGetTableMethod);
             }

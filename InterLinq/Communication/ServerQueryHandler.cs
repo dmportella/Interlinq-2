@@ -93,28 +93,28 @@ namespace InterLinq.Communication
                     realType.GetGenericArguments().Length == 1)
                 {
                     // Find Generic Retrieve Method
-                    mInfo = GetType().GetMethod("RetrieveGeneric");
+                    mInfo = typeof(ServerQueryHandler).GetMethod("RetrieveGeneric");
                     mInfo = mInfo.MakeGenericMethod(realType.GetGenericArguments()[0]);
                 }
                 else
                 {
                     // Find Non-Generic Retrieve Method
-                    mInfo = GetType().GetMethod("RetrieveNonGenericObject");
+                    mInfo = typeof(ServerQueryHandler).GetMethod("RetrieveNonGenericObject");
                 }
 
                 object returnValue = mInfo.Invoke(this, new object[] { expression });
 
-#if !SILVERLIGHT && DEBUG
-                try
-                {
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                    new System.Runtime.Serialization.NetDataContractSerializer().Serialize(ms, returnValue);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-#endif
+//#if !SILVERLIGHT && DEBUG
+//                try
+//                {
+//                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+//                    new System.Runtime.Serialization.NetDataContractSerializer().Serialize(ms, returnValue);
+//                }
+//                catch (Exception)
+//                {
+//                    throw;
+//                }
+//#endif
 
                 return returnValue;
             }

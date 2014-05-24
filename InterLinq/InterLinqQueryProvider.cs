@@ -14,7 +14,6 @@ namespace InterLinq
     /// <seealso cref="System.Linq.IQueryProvider"/>
     public abstract class InterLinqQueryProvider : IQueryProvider
     {
-
         #region IQueryProvider Members
 
         /// <summary>
@@ -79,6 +78,5 @@ namespace InterLinq
         public abstract object Execute(Expression expression);
 
         #endregion
-
     }
 }
