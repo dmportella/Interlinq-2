@@ -203,7 +203,11 @@ namespace InterLinq.Expressions.Helpers
 #if !SILVERLIGHT
                     object value = ((FieldInfo)expression.Member).GetValue(innerExpression.Value);
 #else
+#if !NETFX_CORE
 					MethodInfo executeMethod = GetType().GetMethod("GetValue", BindingFlags.Public | BindingFlags.Instance);
+#else
+                    MethodInfo executeMethod = GetType().GetTypeInfo().GetDeclaredMethod("GetValue");
+#endif
                     MethodInfo genericExecuteMethod = executeMethod.MakeGenericMethod(expression.Type);
                     object value = genericExecuteMethod.Invoke(this, new object[] { Expression.PropertyOrField(innerExpression, expression.Member.Name) });
 #endif

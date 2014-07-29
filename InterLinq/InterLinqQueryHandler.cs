@@ -19,8 +19,13 @@ namespace InterLinq
 
         static InterLinqQueryHandler()
         {
+#if !NETFX_CORE
             getTableMethodWithoutPara = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { });
             getTableMethod = typeof(InterLinqQueryHandler).GetMethod("Get", new Type[] { typeof(object), typeof(string), typeof(object), typeof(object[]) });    
+#else
+            getTableMethodWithoutPara = typeof(InterLinqQueryHandler).GetTypeInfo().GetDeclaredMethods("Get").FirstOrDefault(x=>x.GetParameters().Count() == 0);
+            getTableMethod = typeof(InterLinqQueryHandler).GetTypeInfo().GetDeclaredMethods("Get").FirstOrDefault(x => x.GetParameters().Count() == 4);
+#endif
         }
 
         #region Fields

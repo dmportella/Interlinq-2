@@ -84,10 +84,14 @@ namespace InterLinq.Communication
             }
             finally
             {
+#if !NETFX_CORE
                 asyncResult.AsyncWaitHandle.Close();
+#else
+                asyncResult.AsyncWaitHandle.Dispose();
+#endif
             }
 #endif
-            return receivedObject;
+                return receivedObject;
         }
 
         #endregion

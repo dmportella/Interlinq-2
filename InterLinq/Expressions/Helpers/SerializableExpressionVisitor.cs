@@ -100,9 +100,17 @@ namespace InterLinq.Expressions.Helpers
 #if !SILVERLIGHT
                     MethodInfo executeMethod = GetType().GetMethod("VisitSerializableExpressionTyped", BindingFlags.NonPublic | BindingFlags.Instance);
 #else
+#if !NETFX_CORE
 					MethodInfo executeMethod = GetType().GetMethod("VisitSerializableExpressionTyped", BindingFlags.Public | BindingFlags.Instance);
+#else
+                    MethodInfo executeMethod = GetType().GetTypeInfo().GetDeclaredMethod("VisitSerializableExpressionTyped");
 #endif
+#endif
+#if !NETFX_CORE
                     MethodInfo genericExecuteMethod = executeMethod.MakeGenericMethod(new[] { (Type)expression.Type.GetClrVersion() });
+#else
+                    MethodInfo genericExecuteMethod = executeMethod.MakeGenericMethod(new[] { ((TypeInfo)expression.Type.GetClrVersion()).AsType() });
+#endif
                     returnValue = (Expression)genericExecuteMethod.Invoke(this, new object[] { expression });
                 }
                 else

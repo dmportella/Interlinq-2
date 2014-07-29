@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using InterLinq.Types;
 using InterLinq.Expressions;
+using System.Reflection;
 
 namespace InterLinq
 {
@@ -110,14 +111,22 @@ namespace InterLinq
                 throw new ArgumentNullException("expr");
             }
 
+#if !NETFX_CORE
             if (!typeof(IQueryable<T>).IsAssignableFrom(expr.Type))
+#else
+            if (!typeof(IQueryable<T>).GetTypeInfo().IsAssignableFrom(expr.Type.GetTypeInfo()))
+#endif
             {
                 throw new ArgumentException("expr");
             }
             provider = iQueryProvider;
             expression = expr;
             elementType = typeof(T);
+#if !NETFX_CORE
             elementInterLinqType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(elementType);
+#else
+            elementInterLinqType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(elementType.GetTypeInfo());
+#endif
             AdditionalObject = additionalObject;
             QueryName = queryName;
 
@@ -205,7 +214,11 @@ namespace InterLinq
             {
                 if (elementType == null && elementInterLinqType != null)
                 {
+#if !NETFX_CORE
                     elementType = (Type)elementInterLinqType.GetClrVersion();
+#else
+                    elementType = ((TypeInfo)elementInterLinqType.GetClrVersion()).AsType();
+#endif
                 }
                 return elementType;
             }

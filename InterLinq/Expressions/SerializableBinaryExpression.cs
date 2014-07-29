@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using InterLinq.Expressions.Helpers;
 using InterLinq.Types;
+using System.Reflection;
 
 namespace InterLinq.Expressions
 {
@@ -132,7 +133,11 @@ namespace InterLinq.Expressions
                 case ExpressionType.AddChecked:
                     return "+";
                 case ExpressionType.And:
+#if !NETFX_CORE
                     if ((Type != InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(typeof(bool))) && (Type != InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(typeof(bool?))))
+#else
+                    if ((Type != InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(typeof(bool).GetTypeInfo())) && (Type != InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(typeof(bool?).GetTypeInfo())))
+#endif
                     {
                         return "&";
                     }
@@ -165,7 +170,11 @@ namespace InterLinq.Expressions
                 case ExpressionType.NotEqual:
                     return "!=";
                 case ExpressionType.Or:
+#if !NETFX_CORE
                     if ((Type != InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(typeof(bool))) && (Type != InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(typeof(bool?))))
+#else
+                    if ((Type != InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(typeof(bool).GetTypeInfo())) && (Type != InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(typeof(bool?).GetTypeInfo())))
+#endif
                     {
                         return "|";
                     }

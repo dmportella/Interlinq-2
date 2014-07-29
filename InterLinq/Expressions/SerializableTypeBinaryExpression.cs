@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using InterLinq.Expressions.Helpers;
 using InterLinq.Types;
+using System.Reflection;
 
 namespace InterLinq.Expressions
 {
@@ -34,7 +35,11 @@ namespace InterLinq.Expressions
             : base(expression, expConverter)
         {
             Expression = expression.Expression.MakeSerializable(expConverter);
+#if !NETFX_CORE
             TypeOperand = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(expression.TypeOperand);
+#else
+            TypeOperand = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(expression.TypeOperand.GetTypeInfo());
+#endif
         }
 
         #endregion

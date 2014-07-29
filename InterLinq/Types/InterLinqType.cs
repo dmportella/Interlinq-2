@@ -16,7 +16,9 @@ namespace InterLinq.Types
     [Serializable]
 #endif
     [DataContract(Namespace="http://schemas.interlinq.com/2011/03/")]
+#if !NETFX_CORE
     [KnownType(typeof(AnonymousMetaType))]
+#endif
     public class InterLinqType : InterLinqMemberInfo
     {
         private static Dictionary<string, Type> typeMap = new Dictionary<string, Type>();
@@ -102,7 +104,11 @@ namespace InterLinq.Types
         /// <param name="representedType">Represented CLR <see cref="Type"/>.</param>
         public InterLinqType(Type representedType) : this()
         {
+#if !NETFX_CORE
             Initialize(representedType);
+#else
+            Initialize(representedType.GetTypeInfo());
+#endif
         }
 
         /// <summary>
@@ -112,20 +118,36 @@ namespace InterLinq.Types
         /// <seealso cref="InterLinqMemberInfo.Initialize"/>
         public override void Initialize(MemberInfo memberInfo)
         {
-            Type repType = memberInfo as Type;
+#if !NETFX_CORE
+            var repType = memberInfo as Type;
+#else
+            var repType = memberInfo as TypeInfo;
+#endif
             Name = repType.Name;
             if (repType.IsGenericType)
             {
                 RepresentedType = repType.GetGenericTypeDefinition();
                 IsGeneric = true;
+#if !NETFX_CORE
                 foreach (Type genericArgument in repType.GetGenericArguments())
+#else
+                foreach (Type genericArgument in repType.GenericTypeArguments)
+#endif
                 {
+#if !NETFX_CORE
                     GenericArguments.Add(InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(genericArgument));
+#else
+                    GenericArguments.Add(InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(genericArgument.GetTypeInfo()));
+#endif
                 }
             }
             else
             {
+#if !NETFX_CORE
                 RepresentedType = repType;
+#else
+                RepresentedType = repType.AsType();
+#endif
                 IsGeneric = false;
             }
         }
@@ -144,7 +166,11 @@ namespace InterLinq.Types
             {
                 return RepresentedType;
             }
+#if !NETFX_CORE
             return RepresentedType.MakeGenericType(GenericArguments.Select(arg => (Type)arg.GetClrVersion()).ToArray());
+#else
+            return RepresentedType.MakeGenericType(GenericArguments.Select(arg => ((TypeInfo)arg.GetClrVersion()).AsType()).ToArray());
+#endif
         }
 
         /// <summary>
@@ -158,11 +184,20 @@ namespace InterLinq.Types
             {
                 if (tsInstance.IsInterLinqMemberInfoRegistered(this))
                 {
+#if !NETFX_CORE
                     return tsInstance.GetClrVersion<Type>(this);
+#else
+                    return tsInstance.GetClrVersion<TypeInfo>(this);
+#endif
                 }
                 Type createdType = CreateClrType();
+#if !NETFX_CORE
                 tsInstance.SetClrVersion(this, createdType);
                 return createdType;
+#else
+                tsInstance.SetClrVersion(this, createdType.GetTypeInfo());
+                return createdType.GetTypeInfo();
+#endif
             }
         }
 

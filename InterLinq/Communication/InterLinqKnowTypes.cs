@@ -31,7 +31,9 @@ namespace InterLinq.Communication
             types.Add(typeof(InterLinq.Expressions.SerializableUnaryExpression));
             types.Add(typeof(InterLinq.Expressions.SerializableBinaryExpression));
             types.Add(typeof(InterLinq.Expressions.SerializableConditionalExpression));
+#if !NETFX_CORE
             types.Add(typeof(InterLinq.Types.Anonymous.AnonymousMetaType));
+#endif
             types.Add(typeof(InterLinq.Types.InterLinqType));
             types.Add(typeof(InterLinq.Types.InterLinqMemberInfo));
             types.Add(typeof(InterLinq.Types.InterLinqMethodBase));
@@ -71,8 +73,11 @@ namespace InterLinq.Communication
         /// <param name="provider">The instance of the object that support custom known types.</param>
         /// <returns>A <see cref="IEnumerable{T}"/> of all known <see cref="Type"/>.</returns>
         /// 
-        
+#if !NETFX_CORE
         public static IEnumerable<Type> GetKnownTypes(ICustomAttributeProvider provider)
+#else
+        public static IEnumerable<Type> GetKnownTypes()
+#endif
         {
             return _knownTypes;
         }

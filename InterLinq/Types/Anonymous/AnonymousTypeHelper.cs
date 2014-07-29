@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace InterLinq.Types.Anonymous
 {
@@ -48,7 +49,11 @@ namespace InterLinq.Types.Anonymous
         /// <returns>Returns true if the given <see cref="Type"/> is a <see cref="IGrouping{TKey, TElement}"/> class.</returns>
         public static bool IsIGrouping(this Type t)
         {
+#if !NETFX_CORE
             if (!t.IsGenericType)
+#else
+            if (!t.GetTypeInfo().IsGenericType)
+#endif
             {
                 return false;
             }
@@ -56,9 +61,17 @@ namespace InterLinq.Types.Anonymous
             {
                 return true;
             }
+#if !NETFX_CORE
             foreach (Type interfaceType in t.GetInterfaces())
+#else
+            foreach (Type interfaceType in t.GetTypeInfo().ImplementedInterfaces)
+#endif
             {
+#if !NETFX_CORE
                 if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IGrouping<,>))
+#else
+                if (interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IGrouping<,>))
+#endif
                 {
                     return true;
                 }
@@ -87,7 +100,11 @@ namespace InterLinq.Types.Anonymous
         /// <returns>Returns true if the given <see cref="Type"/> is a <see cref="IEnumerator{t}"/> class.</returns>
         public static bool IsEnumerator(this Type t)
         {
+#if !NETFX_CORE
             if (!t.IsGenericType)
+#else
+            if (!t.GetTypeInfo().IsGenericType)
+#endif
             {
                 return false;
             }
@@ -95,9 +112,17 @@ namespace InterLinq.Types.Anonymous
             {
                 return true;
             }
+#if !NETFX_CORE
             foreach (Type interfaceType in t.GetInterfaces())
+#else
+            foreach (Type interfaceType in t.GetTypeInfo().ImplementedInterfaces)
+#endif
             {
+#if !NETFX_CORE
                 if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEnumerator<>))
+#else
+                if (interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEnumerator<>))
+#endif
                 {
                     return true;
                 }

@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{37804546-01D8-4752-A5F7-A66C1131C112}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>InterLinq_WinRT</RootNamespace>
+    <AssemblyName>InterLinq_WinRT</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_APP;SILVERLIGHT</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP;SILVERLIGHT</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\InterLinq\Communication\ClientQueryHandler.cs">
+      <Link>ClientQueryHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Communication\ClientQueryProvider.cs">
+      <Link>ClientQueryProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Communication\InterLinqKnowTypes.cs">
+      <Link>InterLinqKnowTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\ExpressionConversionHelper.cs">
+      <Link>ExpressionConversionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\Helpers\ExpressionConverter.cs">
+      <Link>ExpressionConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\Helpers\ExpressionVisitor.cs">
+      <Link>ExpressionVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\Helpers\RewriteExpressionVisitor.cs">
+      <Link>RewriteExpressionVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\Helpers\SerializableExpressionConverter.cs">
+      <Link>SerializableExpressionConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\Helpers\SerializableExpressionVisitor.cs">
+      <Link>SerializableExpressionVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableBinaryExpression.cs">
+      <Link>SerializableBinaryExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableConditionalExpression.cs">
+      <Link>SerializableConditionalExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableConstantExpression.cs">
+      <Link>SerializableConstantExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableExpression.cs">
+      <Link>SerializableExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableExpressionTyped.cs">
+      <Link>SerializableExpressionTyped.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableInvocationExpression.cs">
+      <Link>SerializableInvocationExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableLambdaExpression.cs">
+      <Link>SerializableLambdaExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableListInitExpression.cs">
+      <Link>SerializableListInitExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableMemberExpression.cs">
+      <Link>SerializableMemberExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableMemberInitExpression.cs">
+      <Link>SerializableMemberInitExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableMethodCallExpression.cs">
+      <Link>SerializableMethodCallExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableNewArrayExpression.cs">
+      <Link>SerializableNewArrayExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableNewExpression.cs">
+      <Link>SerializableNewExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableParameterExpression.cs">
+      <Link>SerializableParameterExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableTypeBinaryExpression.cs">
+      <Link>SerializableTypeBinaryExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableTypes\SerializableElementInit.cs">
+      <Link>SerializableElementInit.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableTypes\SerializableMemberAssignment.cs">
+      <Link>SerializableMemberAssignment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableTypes\SerializableMemberBinding.cs">
+      <Link>SerializableMemberBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableTypes\SerializableMemberListBinding.cs">
+      <Link>SerializableMemberListBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableTypes\SerializableMemberMemberBinding.cs">
+      <Link>SerializableMemberMemberBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Expressions\SerializableUnaryExpression.cs">
+      <Link>SerializableUnaryExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\InterLinqContext.cs">
+      <Link>InterLinqContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\InterLinqExtensions.cs">
+      <Link>InterLinqExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\InterLinqQuery.cs">
+      <Link>InterLinqQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\InterLinqQueryHandler.cs">
+      <Link>InterLinqQueryHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\InterLinqQueryOfT.cs">
+      <Link>InterLinqQueryOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\InterLinqQueryProvider.cs">
+      <Link>InterLinqQueryProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\IQueryHandler.cs">
+      <Link>IQueryHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\IQueryRemoteHandler.cs">
+      <Link>IQueryRemoteHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\Anonymous\AnonymousMetaProperty.cs">
+      <Link>AnonymousMetaProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\Anonymous\AnonymousMetaType.cs">
+      <Link>AnonymousMetaType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\Anonymous\AnonymousObject.cs">
+      <Link>AnonymousObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\Anonymous\AnonymousProperty.cs">
+      <Link>AnonymousProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\Anonymous\AnonymousTypeHelper.cs">
+      <Link>AnonymousTypeHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\Anonymous\InterLinqGrouping.cs">
+      <Link>InterLinqGrouping.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\InterLinqConstructorInfo.cs">
+      <Link>InterLinqConstructorInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\InterLinqFieldInfo.cs">
+      <Link>InterLinqFieldInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\InterLinqMemberInfo.cs">
+      <Link>InterLinqMemberInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\InterLinqMethodBase.cs">
+      <Link>InterLinqMethodBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\InterLinqMethodInfo.cs">
+      <Link>InterLinqMethodInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\InterLinqPropertyInfo.cs">
+      <Link>InterLinqPropertyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\InterLinqType.cs">
+      <Link>InterLinqType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\InterLinqTypeSystem.cs">
+      <Link>InterLinqTypeSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\InterLinq\Types\TypeConverter.cs">
+      <Link>TypeConverter.cs</Link>
+    </Compile>
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="MemberTypes.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

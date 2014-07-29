@@ -49,7 +49,11 @@ namespace InterLinq.Types.Anonymous
                 throw new ArgumentNullException("property");
             }
             Name = property.Name;
+#if !NETFX_CORE
             PropertyType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(property.PropertyType);
+#else
+            PropertyType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(property.PropertyType.GetTypeInfo());
+#endif
         }
 
         #endregion
