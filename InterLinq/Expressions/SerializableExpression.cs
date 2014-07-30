@@ -40,9 +40,7 @@ namespace InterLinq.Expressions
     [KnownType(typeof(SerializableUnaryExpression))]
     [KnownType(typeof(InterLinqQueryBase))]
     [KnownType(typeof(InterLinq.Types.Anonymous.AnonymousMetaProperty))]
-#if !NETFX_CORE
     [KnownType(typeof(InterLinq.Types.Anonymous.AnonymousMetaType))]
-#endif
     [KnownType(typeof(InterLinq.Types.Anonymous.AnonymousObject))]
     [KnownType(typeof(InterLinq.Types.Anonymous.AnonymousProperty))]
     [KnownType(typeof(InterLinq.Types.Anonymous.InterLinqGroupingBase))]

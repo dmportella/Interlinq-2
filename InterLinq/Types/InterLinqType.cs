@@ -16,9 +16,7 @@ namespace InterLinq.Types
     [Serializable]
 #endif
     [DataContract(Namespace="http://schemas.interlinq.com/2011/03/")]
-#if !NETFX_CORE
     [KnownType(typeof(AnonymousMetaType))]
-#endif
     public class InterLinqType : InterLinqMemberInfo
     {
         private static Dictionary<string, Type> typeMap = new Dictionary<string, Type>();
