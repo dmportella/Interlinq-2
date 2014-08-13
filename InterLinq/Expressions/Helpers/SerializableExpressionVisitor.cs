@@ -72,7 +72,8 @@ namespace InterLinq.Expressions.Helpers
             }
             if (convertedObjects.ContainsKey(expression.HashCode))
             {
-                return (Expression)convertedObjects[expression.HashCode];
+                if (convertedObjects[expression.HashCode] is Expression)
+                    return (Expression)convertedObjects[expression.HashCode];
             }
 
             Expression returnValue;
@@ -151,7 +152,9 @@ namespace InterLinq.Expressions.Helpers
                 returnValue = VisitUnknownSerializableExpression(expression);
             }
 
-            convertedObjects.Add(expression.HashCode, returnValue);
+            if (!convertedObjects.ContainsKey(expression.HashCode))
+                convertedObjects.Add(expression.HashCode, returnValue);
+
             return returnValue;
         }
 
@@ -274,6 +277,7 @@ namespace InterLinq.Expressions.Helpers
             {
                 throw new NotImplementedException();
             }
+
             convertedObjects[expression.HashCode] = foundObject;
 
             return foundObject;
