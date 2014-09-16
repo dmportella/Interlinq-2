@@ -369,7 +369,7 @@ namespace InterLinq.Expressions.Helpers
         /// <returns>Returns the return value of the method call in <paramref name="ex"/>.</returns>
         protected object InvokeMethodCall(SerializableMethodCallExpression ex, object sessionObject)
         {
-            this.sessionObject = sessionObject;
+            //this.sessionObject = sessionObject;
 
 #if !NETFX_CORE
             if (ex.Method.DeclaringType.GetClrVersion() == typeof(Queryable))
@@ -403,12 +403,12 @@ namespace InterLinq.Expressions.Helpers
 
                 var ret = ((MethodInfo) ex.Method.GetClrVersion()).Invoke(ex.Object, args.ToArray());
 
-                this.sessionObject = null;
+                //this.sessionObject = null;
 
                 return ret;
             }
 
-            this.sessionObject = null;
+            //this.sessionObject = null;
 
             // If the method is not of DeclaringType "Queryable", it mustn't be invoked.
             // Without this check, we were able to delete files from the server disk

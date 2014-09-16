@@ -55,6 +55,8 @@ namespace InterLinq.Expressions.Helpers
         /// <returns>Returns the converted <see cref="Expression"/>.</returns>
         public object Visit(object sessionObject)
         {
+            this.sessionObject = sessionObject;
+
             convertedObjects = new Dictionary<int, object>();
             return VisitResult(ExpressionToConvert, sessionObject);
         }
