@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.ServiceModel;
 using InterLinq.Expressions;
 using InterLinq.Types;
 
@@ -63,14 +62,6 @@ namespace InterLinq.Communication
         /// <seealso cref="InterLinqQueryProvider.Execute"/>
         public override object Execute(Expression expression)
         {
-            var channel = Handler as IClientChannel;
-
-            if (channel == null || channel.State != CommunicationState.Opened)
-            {
-                Handler = null;
-                return null;
-            }
-
             SerializableExpression serExp = expression.MakeSerializable();
 #if !SILVERLIGHT           
             object receivedObject = Handler.Retrieve(serExp);            
