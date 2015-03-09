@@ -174,7 +174,8 @@ namespace InterLinq.Expressions.Helpers
                 returnValue = VisitUnknownExpression(expression);
             }
 
-            executedValue.Add(expression.GetHashCode(), returnValue);
+            if (!executedValue.ContainsKey(expression.GetHashCode()))
+                executedValue.Add(expression.GetHashCode(), returnValue);
             return returnValue;
         }
 
