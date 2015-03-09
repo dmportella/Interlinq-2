@@ -82,10 +82,10 @@ namespace InterLinq.Communication
         {
             try
             {
-#if DEBUG
-                Console.WriteLine(expression);
-                Console.WriteLine();
-#endif
+//#if DEBUG
+//                Console.WriteLine(expression);
+//                Console.WriteLine();
+//#endif
 
                 MethodInfo mInfo;
                 Type realType = (Type)expression.Type.GetClrVersion();
