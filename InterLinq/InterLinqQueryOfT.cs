@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using InterLinq.Types;
 using InterLinq.Expressions;
+using System.Reflection;
 
 namespace InterLinq
 {
@@ -46,7 +47,7 @@ namespace InterLinq
         /// <param name="provider"><see cref="IQueryProvider"/> to set.</param>
         public InterLinqQuery(IQueryProvider provider)
         {
-            Initialize(provider, Expression.Constant(this), null);
+            Initialize(provider, Expression.Constant(this), null, null);
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace InterLinq
         /// <param name="expression"><see cref="Expression"/> to set.</param>
         public InterLinqQuery(IQueryProvider provider, Expression expression)
         {
-            Initialize(provider, expression, null);
+            Initialize(provider, expression, null, null);
         }
 
         /// <summary>
@@ -87,9 +88,9 @@ namespace InterLinq
         /// <param name="expr"><see cref="Expression"/> to set.</param>
         /// <param name="queryName">The Query name. This cant be null.</param>
         /// <param name="parameters">The parameters for the query. Dont pass anything here is the named query has no parameters.</param>
-        public InterLinqQuery(IQueryProvider iQueryProvider, Expression expr, string queryName, params object[] parameters)
+        public InterLinqQuery(IQueryProvider iQueryProvider, Expression expr, object additionalObject, string queryName, params object[] parameters)
         {
-            Initialize(iQueryProvider, expr ?? Expression.Constant(this), queryName, parameters);
+            Initialize(iQueryProvider, expr ?? Expression.Constant(this), additionalObject, queryName, parameters);
         }
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace InterLinq
         /// <param name="expr"><see cref="Expression"/> to set.</param>
         /// <param name="queryName">The Query name. This cant be null.</param>
         /// <param name="parameters">The parameters for the query. Dont pass anything here is the named query has no parameters.</param>
-        private void Initialize(IQueryProvider iQueryProvider, Expression expr, string queryName, params object[] parameters)
+        private void Initialize(IQueryProvider iQueryProvider, Expression expr, object additionalObject, string queryName, params object[] parameters)
         {
             if (iQueryProvider == null)
             {
@@ -110,16 +111,33 @@ namespace InterLinq
                 throw new ArgumentNullException("expr");
             }
 
+#if !NETFX_CORE
             if (!typeof(IQueryable<T>).IsAssignableFrom(expr.Type))
+#else
+            if (!typeof(IQueryable<T>).GetTypeInfo().IsAssignableFrom(expr.Type.GetTypeInfo()))
+#endif
             {
                 throw new ArgumentException("expr");
             }
             provider = iQueryProvider;
             expression = expr;
             elementType = typeof(T);
+#if !NETFX_CORE
             elementInterLinqType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(elementType);
+#else
+            elementInterLinqType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(elementType.GetTypeInfo());
+#endif
+            AdditionalObject = additionalObject;
             QueryName = queryName;
-            QueryParameters = (parameters != null && parameters.Count() != 0) ? new List<SerializableExpression>(parameters.Select(s => System.Linq.Expressions.Expression.Constant(s).MakeSerializable()).ToArray()) : null;
+
+            if (!string.IsNullOrEmpty(queryName))
+                QueryParameters = (parameters != null && parameters.Count() != 0)
+                    ? new List<SerializableExpression>(
+                        parameters.Select(s => System.Linq.Expressions.Expression.Constant(s).MakeSerializable())
+                            .ToArray())
+                    : null;
+            else
+                Parameters = parameters;
         }
 
         #endregion
@@ -155,6 +173,8 @@ namespace InterLinq
         {
             IEnumerable retrievedObjects = (IEnumerable)provider.Execute(expression);
             object returnValue = TypeConverter.ConvertFromSerializable(typeof(IEnumerable<T>), retrievedObjects);
+            if (returnValue == null)
+                return (new List<T>()).GetEnumerator();
             return ((IEnumerable<T>)returnValue).GetEnumerator();
         }
 
@@ -194,7 +214,11 @@ namespace InterLinq
             {
                 if (elementType == null && elementInterLinqType != null)
                 {
+#if !NETFX_CORE
                     elementType = (Type)elementInterLinqType.GetClrVersion();
+#else
+                    elementType = ((TypeInfo)elementInterLinqType.GetClrVersion()).AsType();
+#endif
                 }
                 return elementType;
             }

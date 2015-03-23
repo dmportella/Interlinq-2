@@ -5,6 +5,7 @@ using System.Text;
 using InterLinq.Expressions.Helpers;
 using InterLinq.Types;
 using InterLinq.Expressions.SerializableTypes;
+using System.Reflection;
 
 namespace InterLinq.Expressions
 {
@@ -53,7 +54,7 @@ namespace InterLinq.Expressions
     public abstract class SerializableExpression
     {
 
-        #region Constructor
+#region Constructor
 
         /// <summary>
         /// Default constructor for serialization.
@@ -81,7 +82,11 @@ namespace InterLinq.Expressions
             : this()
         {
             NodeType = nodeType;
+#if !NETFX_CORE
             Type = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(type);
+#else
+            Type = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(type.GetTypeInfo());
+#endif
         }
 
         #endregion
@@ -106,9 +111,9 @@ namespace InterLinq.Expressions
         [DataMember]
         public InterLinqType Type { get; set; }
 
-        #endregion
+#endregion
 
-        #region ToString() Methods
+#region ToString() Methods
 
         /// <summary>
         /// Builds a <see langword="string"/> representing the <see cref="Expression"/>.
@@ -136,7 +141,7 @@ namespace InterLinq.Expressions
             builder.Append("]");
         }
 
-        #endregion
+#endregion
 
     }
 }

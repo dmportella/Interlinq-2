@@ -152,7 +152,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(i);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Projection Operators")]
@@ -189,7 +190,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(str);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Projection Operators")]
@@ -208,7 +210,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine("Uppercase: {0}, Lowercase: {1}", wordPair.Upper, wordPair.Lower);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Projection Operators")]
@@ -228,7 +231,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine("The digit {0} is {1}.", digit.Digit, digit.Even ? "even" : "odd");
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Projection Operators")]
@@ -264,7 +268,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine("{0}: {1}", n.Num, n.InPlace);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Projection Operators")]
@@ -286,7 +291,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(num);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Projection Operators")]
@@ -310,7 +316,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine("{0} is less than {1}", pair.a, pair.b);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Projection Operators")]
@@ -401,16 +408,13 @@ namespace InterLinq.Tests
                      "the array.")]
         public void Take_Simple()
         {
-            int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+            var first3Numbers =  this.clientContext.Digits.Take(3);
 
-            var first3Numbers = numbers.Take(3);
-
-            Console.WriteLine("First 3 numbers:");
+            Console.WriteLine("First 3 digits:");
             foreach (var n in first3Numbers)
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
         }
 
         [TestCategory("Partitioning Operators")]
@@ -448,7 +452,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Partitioning Operators")]
@@ -487,7 +492,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(num);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Partitioning Operators")]
@@ -506,7 +512,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Partitioning Operators")]
@@ -527,7 +534,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Partitioning Operators")]
@@ -545,7 +553,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Ordering Operators")]
@@ -565,7 +574,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(w);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Ordering Operators")]
@@ -585,7 +595,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(w);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Ordering Operators")]
@@ -623,7 +634,8 @@ namespace InterLinq.Tests
 
             ObjectDumper.Write(sortedWords);
 
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Ordering Operators")]
@@ -644,7 +656,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(d);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Ordering Operators")]
@@ -672,7 +685,8 @@ namespace InterLinq.Tests
             var sortedWords = words.OrderByDescending(a => a, new CaseInsensitiveComparer());
 
             ObjectDumper.Write(sortedWords);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Ordering Operators")]
@@ -684,7 +698,7 @@ namespace InterLinq.Tests
             string[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
             var sortedDigits =
-                from digit in digits
+                from digit in this.clientContext.Digits
                 orderby digit.Length, digit
                 select digit;
 
@@ -693,7 +707,6 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(d);
             }
-            throw new NotImplementedException();
         }
 
         [TestCategory("Ordering Operators")]
@@ -720,7 +733,8 @@ namespace InterLinq.Tests
             ObjectDumper.Write(sortedWords);
 
             ObjectDumper.Write(sortedWords3);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Ordering Operators")]
@@ -751,7 +765,8 @@ namespace InterLinq.Tests
                      .ThenByDescending(a => a, new CaseInsensitiveComparer());
 
             ObjectDumper.Write(sortedWords);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Ordering Operators")]
@@ -760,10 +775,8 @@ namespace InterLinq.Tests
                      "second letter is 'i' that is reversed from the order in the original array.")]
         public void Reverse()
         {
-            string[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
-
             var reversedIDigits = (
-                from digit in digits
+                from digit in this.clientContext.Digits
                 where digit[1] == 'i'
                 select digit)
                 .Reverse();
@@ -773,7 +786,6 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(d);
             }
-            throw new NotImplementedException();
         }
 
         [TestCategory("Grouping Operators")]
@@ -797,7 +809,8 @@ namespace InterLinq.Tests
                     Console.WriteLine(n);
                 }
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Grouping Operators")]
@@ -821,7 +834,8 @@ namespace InterLinq.Tests
                     Console.WriteLine(word);
                 }
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Grouping Operators")]
@@ -897,7 +911,8 @@ namespace InterLinq.Tests
             var orderGroups = anagrams.GroupBy(w => w.Trim(), new AnagramEqualityComparer());
 
             ObjectDumper.Write(orderGroups, 1);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Grouping Operators")]
@@ -916,7 +931,8 @@ namespace InterLinq.Tests
                         );
 
             ObjectDumper.Write(orderGroups, 1);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Set Operators")]
@@ -934,7 +950,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(f);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Set Operators")]
@@ -970,7 +987,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Set Operators")]
@@ -1012,7 +1030,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Set Operators")]
@@ -1053,7 +1072,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Set Operators")]
@@ -1096,7 +1116,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(doublesArray[d]);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Conversion Operators")]
@@ -1117,7 +1138,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(w);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Conversion Operators")]
@@ -1134,7 +1156,8 @@ namespace InterLinq.Tests
             var scoreRecordsDict = scoreRecords.ToDictionary(sr => sr.Name);
 
             Console.WriteLine("Bob's score: {0}", scoreRecordsDict["Bob"]);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Conversion Operators")]
@@ -1151,7 +1174,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(d);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Element Operators")]
@@ -1174,12 +1198,9 @@ namespace InterLinq.Tests
         [Description("This sample uses First to find the first element in the array that starts with 'o'.")]
         public void First_Condition()
         {
-            string[] strings = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+            Product product12 = this.clientContext.Products.First(prod => prod.ProductID == 12);
 
-            string startsWithO = strings.First(s => s[0] == 'o');
-
-            Console.WriteLine("A string starting with 'o': {0}", startsWithO);
-            throw new NotImplementedException();
+            ObjectDumper.Write(product12);
         }
 
         [TestCategory("Element Operators")]
@@ -1189,12 +1210,11 @@ namespace InterLinq.Tests
                      "is returned. FirstOrDefault is useful for creating outer joins.")]
         public void FirstOrDefault_Simple()
         {
-            int[] numbers = { };
+            Product product = this.clientContext.Products.FirstOrDefault();
 
-            int firstNumOrDefault = numbers.FirstOrDefault();
-
-            Console.WriteLine(firstNumOrDefault);
-            throw new NotImplementedException();
+            Console.WriteLine("Product exists: {0}", product != null);
+            //Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Element Operators")]
@@ -1223,7 +1243,8 @@ namespace InterLinq.Tests
                 .ElementAt(1);  // second number is index 1 because sequences use 0-based indexing
 
             Console.WriteLine("Second number > 5: {0}", fourthLowNum);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Generation Operators")]
@@ -1240,7 +1261,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine("The number {0} is {1}.", n.Number, n.OddEven);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Generation Operators")]
@@ -1254,7 +1276,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
 
@@ -1270,7 +1293,8 @@ namespace InterLinq.Tests
 
             //DONE fixed typo in writeline
             Console.WriteLine("There is a word in the list that contains 'ei': {0}", iAfterE);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Quantifiers")]
@@ -1299,7 +1323,8 @@ namespace InterLinq.Tests
             bool onlyOdd = numbers.All(n => n % 2 == 1);
 
             Console.WriteLine("The list contains only odd numbers: {0}", onlyOdd);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Quantifiers")]
@@ -1324,10 +1349,11 @@ namespace InterLinq.Tests
         {
             int[] primeFactorsOf300 = { 2, 2, 3, 5, 5 };
 
-            int uniqueFactors = primeFactorsOf300.Distinct().Count();
+            int uniqueFactors = this.clientContext.Products.Count();
 
             Console.WriteLine("There are {0} unique prime factors of 300.", uniqueFactors);
-            throw new NotImplementedException();
+            //Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Aggregate Operators")]
@@ -1382,7 +1408,8 @@ namespace InterLinq.Tests
             double numSum = numbers.Sum();
 
             Console.WriteLine("The sum of the numbers is {0}.", numSum);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Aggregate Operators")]
@@ -1391,12 +1418,9 @@ namespace InterLinq.Tests
                      "in the array.")]
         public void Sum_Projection()
         {
-            string[] words = { "cherry", "apple", "blueberry" };
+            double totalUnits = this.clientContext.Products.Sum(w => w.UnitsInStock);
 
-            double totalChars = words.Sum(w => w.Length);
-
-            Console.WriteLine("There are a total of {0} characters in these words.", totalChars);
-            throw new NotImplementedException();
+            Console.WriteLine("There are a total of {0} units in stock.", totalUnits);
         }
 
 
@@ -1424,7 +1448,8 @@ namespace InterLinq.Tests
             int minNum = numbers.Min();
 
             Console.WriteLine("The minimum number is {0}.", minNum);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Aggregate Operators")]
@@ -1437,7 +1462,8 @@ namespace InterLinq.Tests
             int shortestWord = words.Min(w => w.Length);
 
             Console.WriteLine("The shortest word is {0} characters long.", shortestWord);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Aggregate Operators")]
@@ -1477,7 +1503,8 @@ namespace InterLinq.Tests
             int maxNum = numbers.Max();
 
             Console.WriteLine("The maximum number is {0}.", maxNum);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Aggregate Operators")]
@@ -1490,7 +1517,8 @@ namespace InterLinq.Tests
             int longestLength = words.Max(w => w.Length);
 
             Console.WriteLine("The longest word is {0} characters long.", longestLength);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Aggregate Operators")]
@@ -1527,10 +1555,11 @@ namespace InterLinq.Tests
         {
             int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
 
-            double averageNum = numbers.Average();
+            decimal averageNum = this.clientContext.Products.Select(p => p.UnitPrice).Average();
 
             Console.WriteLine("The average number is {0}.", averageNum);
-            throw new NotImplementedException();
+            //Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Aggregate Operators")]
@@ -1543,7 +1572,8 @@ namespace InterLinq.Tests
             double averageLength = words.Average(w => w.Length);
 
             Console.WriteLine("The average word length is {0} characters.", averageLength);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Aggregate Operators")]
@@ -1570,7 +1600,8 @@ namespace InterLinq.Tests
             double product = doubles.Aggregate((runningProduct, nextFactor) => runningProduct * nextFactor);
 
             Console.WriteLine("Total product of all numbers: {0}", product);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Aggregate Operators")]
@@ -1590,7 +1621,8 @@ namespace InterLinq.Tests
                         ((nextWithdrawal <= balance) ? (balance - nextWithdrawal) : balance));
 
             Console.WriteLine("Ending balance: {0}", endBalance);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Miscellaneous Operators")]
@@ -1609,7 +1641,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Miscellaneous Operators")]
@@ -1646,7 +1679,8 @@ namespace InterLinq.Tests
             bool match = wordsA.SequenceEqual(wordsB);
 
             Console.WriteLine("The sequences match: {0}", match);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Miscellaneous Operators")]
@@ -1661,7 +1695,8 @@ namespace InterLinq.Tests
             bool match = wordsA.SequenceEqual(wordsB);
 
             Console.WriteLine("The sequences match: {0}", match);
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Query Execution")]
@@ -1687,7 +1722,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine("v = {0}, i = {1}", item, i); // now i is incremented          
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Query Execution")]
@@ -1713,7 +1749,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine("v = {0}, i = {1}", item, i);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Query Execution")]
@@ -1763,7 +1800,8 @@ namespace InterLinq.Tests
             {
                 Console.WriteLine(n);
             }
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+            //throw new NotImplementedException();
         }
 
         [TestCategory("Join Operators")]

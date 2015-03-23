@@ -66,8 +66,13 @@ namespace InterLinq.Types
                     return tsInstance.GetClrVersion<ConstructorInfo>(this);
                 }
 
+#if !NETFX_CORE
                 Type declaringType = (Type)DeclaringType.GetClrVersion();
                 ConstructorInfo foundConstructor = declaringType.GetConstructor(ParameterTypes.Select(p => (Type)p.GetClrVersion()).ToArray());
+#else
+                Type declaringType = ((TypeInfo)DeclaringType.GetClrVersion()).AsType();
+                ConstructorInfo foundConstructor = declaringType.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => Enumerable.SequenceEqual(x.GetParameters().Select(y => y.ParameterType), ParameterTypes.Select(p => ((TypeInfo)p.GetClrVersion()).AsType())));
+#endif
                 tsInstance.SetClrVersion(this, foundConstructor);
                 return foundConstructor;
             }

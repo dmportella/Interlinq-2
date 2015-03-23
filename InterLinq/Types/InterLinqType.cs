@@ -19,6 +19,7 @@ namespace InterLinq.Types
     [KnownType(typeof(AnonymousMetaType))]
     public class InterLinqType : InterLinqMemberInfo
     {
+        private static Dictionary<string, Type> typeMap = new Dictionary<string, Type>();
 
         #region Properties
 
@@ -46,8 +47,34 @@ namespace InterLinq.Types
         /// </summary> 
         public Type RepresentedType
         {
-            get { return Type.GetType(representedType); }
-            set { representedType = value.AssemblyQualifiedName; }
+            get
+            {
+#if !SILVERLIGHT
+                var tp = Type.GetType(representedType);
+                if (tp != null)
+                   return tp;
+
+                typeMap.TryGetValue(representedType, out tp);
+                if (tp == null)
+                {
+                    lock (typeMap)
+                    {
+                        if (!typeMap.ContainsKey(representedType))
+                        {
+                            typeMap[representedType] =
+                                System.AppDomain.CurrentDomain.GetAssemblies()
+                                    .SelectMany(x => x.GetTypes())
+                                    .FirstOrDefault(x => x.FullName == representedType);
+                        }
+                    }
+                }
+ 
+                return typeMap[representedType];                 
+#else
+                return Type.GetType(representedType);
+#endif
+            }
+            set { representedType = value.FullName; } // AssemblyQualifiedName; }
         }
 
         /// <summary>
@@ -75,7 +102,11 @@ namespace InterLinq.Types
         /// <param name="representedType">Represented CLR <see cref="Type"/>.</param>
         public InterLinqType(Type representedType) : this()
         {
+#if !NETFX_CORE
             Initialize(representedType);
+#else
+            Initialize(representedType.GetTypeInfo());
+#endif
         }
 
         /// <summary>
@@ -85,20 +116,36 @@ namespace InterLinq.Types
         /// <seealso cref="InterLinqMemberInfo.Initialize"/>
         public override void Initialize(MemberInfo memberInfo)
         {
-            Type repType = memberInfo as Type;
+#if !NETFX_CORE
+            var repType = memberInfo as Type;
+#else
+            var repType = memberInfo as TypeInfo;
+#endif
             Name = repType.Name;
             if (repType.IsGenericType)
             {
                 RepresentedType = repType.GetGenericTypeDefinition();
                 IsGeneric = true;
+#if !NETFX_CORE
                 foreach (Type genericArgument in repType.GetGenericArguments())
+#else
+                foreach (Type genericArgument in repType.GenericTypeArguments)
+#endif
                 {
+#if !NETFX_CORE
                     GenericArguments.Add(InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(genericArgument));
+#else
+                    GenericArguments.Add(InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(genericArgument.GetTypeInfo()));
+#endif
                 }
             }
             else
             {
+#if !NETFX_CORE
                 RepresentedType = repType;
+#else
+                RepresentedType = repType.AsType();
+#endif
                 IsGeneric = false;
             }
         }
@@ -117,7 +164,11 @@ namespace InterLinq.Types
             {
                 return RepresentedType;
             }
+#if !NETFX_CORE
             return RepresentedType.MakeGenericType(GenericArguments.Select(arg => (Type)arg.GetClrVersion()).ToArray());
+#else
+            return RepresentedType.MakeGenericType(GenericArguments.Select(arg => ((TypeInfo)arg.GetClrVersion()).AsType()).ToArray());
+#endif
         }
 
         /// <summary>
@@ -131,11 +182,20 @@ namespace InterLinq.Types
             {
                 if (tsInstance.IsInterLinqMemberInfoRegistered(this))
                 {
+#if !NETFX_CORE
                     return tsInstance.GetClrVersion<Type>(this);
+#else
+                    return tsInstance.GetClrVersion<TypeInfo>(this);
+#endif
                 }
                 Type createdType = CreateClrType();
+#if !NETFX_CORE
                 tsInstance.SetClrVersion(this, createdType);
                 return createdType;
+#else
+                tsInstance.SetClrVersion(this, createdType.GetTypeInfo());
+                return createdType.GetTypeInfo();
+#endif
             }
         }
 

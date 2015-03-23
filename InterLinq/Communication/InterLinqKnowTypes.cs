@@ -11,15 +11,11 @@ namespace InterLinq.Communication
     /// </summary>
     public static class InterLinqKnowTypes
     {
-        /// <summary>
-        /// Return a list of all known types for the interlinq framework.
-        /// </summary>
-        /// <param name="provider">The instance of the object that support custom known types.</param>
-        /// <returns>A <see cref="IEnumerable{T}"/> of all known <see cref="Type"/>.</returns>
-        public static IEnumerable<Type> GetKnownTypes(ICustomAttributeProvider provider)
+        private static Type[] _knownTypes;
+
+        static InterLinqKnowTypes()
         {
             List<Type> types = new List<Type>();
-
             types.Add(typeof(InterLinq.Expressions.SerializableInvocationExpression));
             types.Add(typeof(InterLinq.Expressions.SerializableNewArrayExpression));
             types.Add(typeof(InterLinq.Expressions.SerializableConstantExpression));
@@ -35,7 +31,9 @@ namespace InterLinq.Communication
             types.Add(typeof(InterLinq.Expressions.SerializableUnaryExpression));
             types.Add(typeof(InterLinq.Expressions.SerializableBinaryExpression));
             types.Add(typeof(InterLinq.Expressions.SerializableConditionalExpression));
+#if !NETFX_CORE
             types.Add(typeof(InterLinq.Types.Anonymous.AnonymousMetaType));
+#endif
             types.Add(typeof(InterLinq.Types.InterLinqType));
             types.Add(typeof(InterLinq.Types.InterLinqMemberInfo));
             types.Add(typeof(InterLinq.Types.InterLinqMethodBase));
@@ -64,8 +62,24 @@ namespace InterLinq.Communication
             types.Add(typeof(System.Reflection.MethodBase));
             types.Add(typeof(System.Reflection.MemberInfo));
             types.Add(typeof(System.Exception));
+            types.Add(typeof(object[]));
+			types.Add(typeof(InterLinq.InterLinqQuery<string>));
 
-            return types;
+            _knownTypes = types.ToArray();
+        }
+        /// <summary>
+        /// Return a list of all known types for the interlinq framework.
+        /// </summary>
+        /// <param name="provider">The instance of the object that support custom known types.</param>
+        /// <returns>A <see cref="IEnumerable{T}"/> of all known <see cref="Type"/>.</returns>
+        /// 
+#if !NETFX_CORE
+        public static IEnumerable<Type> GetKnownTypes(ICustomAttributeProvider provider)
+#else
+        public static IEnumerable<Type> GetKnownTypes()
+#endif
+        {
+            return _knownTypes;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using InterLinq.Types.Anonymous;
+using System.Linq;
 
 namespace InterLinq.Types
 {
@@ -67,7 +68,11 @@ namespace InterLinq.Types
                 }
 
                 InterLinqMemberInfo createdMemberInfo;
+#if !NETFX_CORE
                 switch (memberInfo.MemberType)
+#else
+                switch (memberInfo.GetMemberType())
+#endif
                 {
                     case MemberTypes.Constructor:
                         createdMemberInfo = new InterLinqConstructorInfo();
@@ -83,7 +88,11 @@ namespace InterLinq.Types
                         break;
                     case MemberTypes.NestedType:
                     case MemberTypes.TypeInfo:
+#if !NETFX_CORE
                         createdMemberInfo = ((Type)memberInfo).IsAnonymous() ? new AnonymousMetaType() : new InterLinqType();
+#else
+                        createdMemberInfo = ((TypeInfo)memberInfo).AsType().IsAnonymous() ? new AnonymousMetaType() : new InterLinqType();
+#endif
                         break;
                     default:
                         throw new Exception(string.Format("MemberInfo \"{0}\" could not be handled.", memberInfo));
@@ -184,7 +193,11 @@ namespace InterLinq.Types
             {
                 return seqType;
             }
+#if !NETFX_CORE
             return ienum.GetGenericArguments()[0];
+#else
+            return ienum.GetTypeInfo().GenericTypeArguments[0];
+#endif
         }
 
         /// <summary>
@@ -198,18 +211,34 @@ namespace InterLinq.Types
                 return null;
             if (seqType.IsArray)
                 return typeof(IEnumerable<>).MakeGenericType(seqType.GetElementType());
+#if !NETFX_CORE
             if (seqType.IsGenericType)
+#else
+            if (seqType.GetTypeInfo().IsGenericType)
+#endif
             {
+#if !NETFX_CORE
                 foreach (Type arg in seqType.GetGenericArguments())
+#else
+                foreach (Type arg in seqType.GetTypeInfo().GenericTypeArguments)
+#endif
                 {
                     Type ienum = typeof(IEnumerable<>).MakeGenericType(arg);
+#if !NETFX_CORE
                     if (ienum.IsAssignableFrom(seqType))
+#else
+                    if (ienum.GetTypeInfo().IsAssignableFrom(seqType.GetTypeInfo()))
+#endif
                     {
                         return ienum;
                     }
                 }
             }
+#if !NETFX_CORE
             Type[] ifaces = seqType.GetInterfaces();
+#else
+            Type[] ifaces = seqType.GetTypeInfo().ImplementedInterfaces.ToArray();
+#endif
             if (ifaces != null && ifaces.Length > 0)
             {
                 foreach (Type iface in ifaces)
@@ -219,10 +248,13 @@ namespace InterLinq.Types
                         return ienum;
                 }
             }
+#if !NETFX_CORE
             if (seqType.BaseType != null && seqType.BaseType != typeof(object))
-            {
                 return FindIEnumerable(seqType.BaseType);
-            }
+#else
+            if (seqType.GetTypeInfo().BaseType != null && seqType.GetTypeInfo().BaseType != typeof(object))
+                return FindIEnumerable(seqType.GetTypeInfo().BaseType);
+#endif
             return null;
         }
 

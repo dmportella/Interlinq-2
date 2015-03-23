@@ -15,7 +15,7 @@ namespace InterLinq
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    [DataContract(Namespace = "http://schemas.interlinq.com/2011/03/")]
+    [DataContract(Namespace = "http://schemas.interlinq.com/2011/03/", Name = "ILQB")]
     public abstract class InterLinqQueryBase
     {
         #region Properties
@@ -23,15 +23,29 @@ namespace InterLinq
         /// <summary>
         /// The name of the query. Used for named queries on the server.
         /// </summary>
-        [DataMember(Order = 1)]
+        [DataMember(Order = 1, Name = "A")]
         public string QueryName
+        { get; set; }
+
+        /// <summary>
+        /// The name of the query. Used for named queries on the server.
+        /// </summary>
+        [DataMember(Name = "B")]
+        public object AdditionalObject
         { get; set; }
 
         /// <summary>
         /// The parameters for the query. User for named queries on the server.
         /// </summary>
-        [DataMember(Order = 1)]
+        [DataMember(Order = 1, Name = "C")]
         public List<SerializableExpression> QueryParameters
+        { get; set; }
+
+        /// <summary>
+        /// The parameters for the query.
+        /// </summary>
+        [DataMember(Order = 1, Name = "D")]
+        public object[] Parameters
         { get; set; }
 
         #region Property ElementType
@@ -59,7 +73,7 @@ namespace InterLinq
         /// <summary>
         /// Gets or sets a <see cref="InterLinqType">InterLINQ Element Type</see> of the <see cref="Expression"/>.
         /// </summary>
-        [DataMember]
+        [DataMember(Name = "E")]
         public InterLinqType ElementInterLinqType
         {
             get { return elementInterLinqType; }

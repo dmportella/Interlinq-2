@@ -6,52 +6,43 @@ using System.Linq.Expressions;
 namespace InterLinq
 {
     /// <summary>
-    /// Interface providing methods to get <see cref="IQueryable{T}"/>.
+    /// Interface providing methods to get <see cref="T:System.Linq.IQueryable`1"/>.
     /// </summary>
     public interface IQueryHandler
     {
-        /// <summary>
-        /// Returns an <see cref="IQueryable{T}"/>.
-        /// </summary>
-        /// <param name="type">Type of the returned <see cref="IQueryable{T}"/>.</param>
-        /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        IQueryable Get(Type type);
+        //IQueryable Get(Type type);
+        //IQueryable<T> Get<T>() where T : class;
 
         /// <summary>
-        /// Returns an <see cref="IQueryable{T}"/>.
+        /// Returns an <see cref="T:System.Linq.IQueryable"/>.
         /// </summary>
-        /// <typeparam name="T">Generic Argument of the returned <see cref="IQueryable{T}"/>.</typeparam>
-        /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        IQueryable<T> Get<T>() where T : class;
-
-        /// <summary>
-        /// Returns an <see cref="IQueryable{T}"/>.
-        /// </summary>
-        /// <param name="type">Type of the returned <see cref="IQueryable{T}"/>.</param>
+        /// <param name="type">Type of the returned <see cref="T:System.Linq.IQueryable"/>.</param>
         /// <param name="queryName">The named query to call.</param>
+        /// <param name="sessionObject">The object that represents session.</param>
         /// <param name="parameters">The parameters of the named query.</param>
-        /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        IQueryable Get(Type type, string queryName, params object[] parameters);
+        /// <returns>Returns an <see cref="T:System.Linq.IQueryable"/>.</returns>
+        IQueryable Get(Type type, object additionalObject, string queryName, object sessionObject, params object[] parameters);
 
         /// <summary>
-        /// Returns an <see cref="IQueryable{T}"/>.
+        /// Returns an <see cref="T:System.Linq.IQueryable`1"/>.
         /// </summary>
-        /// <typeparam name="T">Generic Argument of the returned <see cref="IQueryable{T}"/>.</typeparam>
+        /// <typeparam name="T">Generic Argument of the returned <see cref="T:System.Linq.IQueryable`1"/>.</typeparam>
         /// <param name="queryName">The named query to call.</param>
+        /// <param name="sessionObject">The object that represents session.</param>
         /// <param name="parameters">The parameters of the named query.</param>
-        /// <returns>Returns an <see cref="IQueryable{T}"/>.</returns>
-        IQueryable<T> Get<T>(string queryName, params object[] parameters) where T : class;
+        /// <returns>Returns an <see cref="T:System.Linq.IQueryable`1"/>.</returns>
+        IQueryable<T> Get<T>(object additionalObject, string queryName, object sessionObject, params object[] parameters) where T : class;
 
         /// <summary>
-        /// Tells the <see cref="IQueryHandler"/> to start a new the session.
+        /// Tells the <see cref="T:System.Linq.IQueryHandler"/> to start a new the session.
         /// </summary>
-        /// <returns>True, if the session creation was successful. False, if not.</returns>
-        bool StartSession();
+        /// <returns>Session object, if the session creation was successful. <c>null</c>, if not.</returns>
+        object StartSession();
 
         /// <summary>
-        /// Tells the <see cref="IQueryHandler"/> to close the current session.
+        /// Tells the <see cref="T:System.Linq.IQueryHandler"/> to close the specified session.
         /// </summary>
-        /// <returns>True, if the session closing was successful. False, if not.</returns>
-        bool CloseSession();
+        /// <returns><c>true</c>, if the session closing was successful. <c>false</c>, if not.</returns>
+        bool CloseSession(object sessionObject);
     }
 }

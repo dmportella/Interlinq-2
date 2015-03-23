@@ -67,7 +67,11 @@ namespace InterLinq.Types
         public virtual void Initialize(MemberInfo memberInfo)
         {
             Name = memberInfo.Name;
+#if !NETFX_CORE
             DeclaringType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(memberInfo.DeclaringType);
+#else
+            DeclaringType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(memberInfo.DeclaringType.GetTypeInfo());
+#endif
         }
 
         #endregion

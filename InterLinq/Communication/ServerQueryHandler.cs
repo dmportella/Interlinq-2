@@ -82,10 +82,10 @@ namespace InterLinq.Communication
         {
             try
             {
-#if DEBUG
-                Console.WriteLine(expression);
-                Console.WriteLine();
-#endif
+//#if DEBUG
+//                Console.WriteLine(expression);
+//                Console.WriteLine();
+//#endif
 
                 MethodInfo mInfo;
                 Type realType = (Type)expression.Type.GetClrVersion();
@@ -93,35 +93,37 @@ namespace InterLinq.Communication
                     realType.GetGenericArguments().Length == 1)
                 {
                     // Find Generic Retrieve Method
-                    mInfo = GetType().GetMethod("RetrieveGeneric");
+                    mInfo = typeof(ServerQueryHandler).GetMethod("RetrieveGeneric");
                     mInfo = mInfo.MakeGenericMethod(realType.GetGenericArguments()[0]);
                 }
                 else
                 {
                     // Find Non-Generic Retrieve Method
-                    mInfo = GetType().GetMethod("RetrieveNonGenericObject");
+                    mInfo = typeof(ServerQueryHandler).GetMethod("RetrieveNonGenericObject");
                 }
 
                 object returnValue = mInfo.Invoke(this, new object[] { expression });
 
-#if !SILVERLIGHT && DEBUG
-                try
-                {
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                    new System.Runtime.Serialization.NetDataContractSerializer().Serialize(ms, returnValue);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-#endif
+//#if !SILVERLIGHT && DEBUG
+//                try
+//                {
+//                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+//                    new System.Runtime.Serialization.NetDataContractSerializer().Serialize(ms, returnValue);
+//                }
+//                catch (Exception)
+//                {
+//                    throw;
+//                }
+//#endif
 
                 return returnValue;
             }
             catch (Exception ex)
             {
-                HandleExceptionInRetrieve(ex);
-                throw;
+                if (!HandleExceptionInRetrieve(ex))
+                    throw;
+                else
+                    return null;
             }
         }
 
@@ -164,13 +166,18 @@ namespace InterLinq.Communication
         /// </remarks>
         public object RetrieveGeneric<T>(SerializableExpression serializableExpression)
         {
+            object session = null;
             try
             {
-                QueryHandler.StartSession();
-                IQueryable<T> query = serializableExpression.Convert(QueryHandler) as IQueryable<T>;
-                var returnValue = query.ToArray();
-                object convertedReturnValue = TypeConverter.ConvertToSerializable(returnValue);
-                return convertedReturnValue;
+                session = QueryHandler.StartSession();
+                IQueryable<T> query = serializableExpression.Convert(QueryHandler, session) as IQueryable<T>;
+                if (query != null)
+                {
+                    var returnValue = query.ToArray();
+                    object convertedReturnValue = TypeConverter.ConvertToSerializable(returnValue);
+                    return convertedReturnValue;
+                }
+                return null;
             }
             catch
             {
@@ -178,7 +185,7 @@ namespace InterLinq.Communication
             }
             finally
             {
-                QueryHandler.CloseSession();
+                QueryHandler.CloseSession(session);
             }
         }
 
@@ -220,10 +227,11 @@ namespace InterLinq.Communication
         /// <seealso cref="IQueryRemoteHandler.Retrieve"/>
         public object RetrieveNonGenericObject(SerializableExpression serializableExpression)
         {
+            object session = null;
             try
             {
-                QueryHandler.StartSession();
-                object returnValue = serializableExpression.Convert(QueryHandler);
+                session = QueryHandler.StartSession();
+                object returnValue = serializableExpression.Convert(QueryHandler, session);
                 object convertedReturnValue = TypeConverter.ConvertToSerializable(returnValue);
                 return convertedReturnValue;
             }
@@ -233,7 +241,7 @@ namespace InterLinq.Communication
             }
             finally
             {
-                QueryHandler.CloseSession();
+                QueryHandler.CloseSession(session);
             }
         }
 
@@ -245,9 +253,9 @@ namespace InterLinq.Communication
         /// Thrown <see cref="Exception"/> 
         /// in <see cref="IQueryRemoteHandler.Retrieve"/> Method.
         /// </param>
-        protected virtual void HandleExceptionInRetrieve(Exception exception)
+        protected virtual bool HandleExceptionInRetrieve(Exception exception)
         {
-            throw exception;
+            return false;
         }
 
         #endregion

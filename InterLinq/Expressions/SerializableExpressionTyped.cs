@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using InterLinq.Expressions.Helpers;
 using InterLinq.Types;
+using System.Reflection;
 
 namespace InterLinq.Expressions
 {
@@ -33,7 +34,11 @@ namespace InterLinq.Expressions
         public SerializableExpressionTyped(LambdaExpression expression, Type delegateType, ExpressionConverter expConverter)
             : base(expression, expConverter)
         {
+#if !NETFX_CORE
             Type = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(delegateType);
+#else
+            Type = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(delegateType.GetTypeInfo());
+#endif
         }
 
         #endregion

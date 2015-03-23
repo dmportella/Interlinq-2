@@ -60,7 +60,11 @@ namespace InterLinq.Types
             MethodBase methodBase = memberInfo as MethodBase;
             foreach (ParameterInfo parameter in methodBase.GetParameters())
             {
+#if !NETFX_CORE
                 ParameterTypes.Add(InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(parameter.ParameterType));
+#else
+                ParameterTypes.Add(InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(parameter.ParameterType.GetTypeInfo()));
+#endif
             }
         }
 

@@ -63,8 +63,35 @@ namespace InterLinq.Communication
         public override object Execute(Expression expression)
         {
             SerializableExpression serExp = expression.MakeSerializable();
-            object receivedObject = Handler.Retrieve(serExp);
-            return receivedObject;
+#if !SILVERLIGHT           
+            object receivedObject = Handler.Retrieve(serExp);            
+#else
+            IAsyncResult asyncResult = Handler.BeginRetrieve(serExp, null, null);
+            object receivedObject = null;
+
+            if (!asyncResult.CompletedSynchronously)
+            {
+                asyncResult.AsyncWaitHandle.WaitOne();
+            }
+
+            try
+            {
+                receivedObject = Handler.EndRetrieve(asyncResult);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+#if !NETFX_CORE
+                asyncResult.AsyncWaitHandle.Close();
+#else
+                asyncResult.AsyncWaitHandle.Dispose();
+#endif
+            }
+#endif
+                return receivedObject;
         }
 
         #endregion

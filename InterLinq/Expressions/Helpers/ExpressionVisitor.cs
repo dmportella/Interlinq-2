@@ -105,7 +105,11 @@ namespace InterLinq.Expressions.Helpers
             else if (expression is LambdaExpression)
             {
                 Type fromType = expression.GetType();
+#if !NETFX_CORE
                 if (fromType.IsGenericType)
+#else
+                if (fromType.GetTypeInfo().IsGenericType)
+#endif
                 {
 #if !SILVERLIGHT
                     Type[] genericTypes = fromType.GetGenericArguments();
@@ -113,8 +117,13 @@ namespace InterLinq.Expressions.Helpers
                     MethodInfo genericExecuteMethod = executeMethod.MakeGenericMethod(genericTypes);
                     returnValue = genericExecuteMethod.Invoke(this, new object[] { expression });
 #else
+#if !NETFX_CORE
 					Type[] genericTypes = fromType.GetGenericArguments();
                     MethodInfo executeMethod = GetType().GetMethod("FakeVisitTypedExpression", BindingFlags.Public | BindingFlags.Instance);
+#else
+                    Type[] genericTypes = fromType.GetTypeInfo().GenericTypeArguments;
+                    MethodInfo executeMethod = GetType().GetTypeInfo().GetDeclaredMethod("FakeVisitTypedExpression");
+#endif
                     //MethodInfo genericExecuteMethod = executeMethod.MakeGenericMethod(genericTypes);
                     returnValue = executeMethod.Invoke(this, new object[] { expression, genericTypes[0] });
 #endif
@@ -165,7 +174,8 @@ namespace InterLinq.Expressions.Helpers
                 returnValue = VisitUnknownExpression(expression);
             }
 
-            executedValue.Add(expression.GetHashCode(), returnValue);
+            if (!executedValue.ContainsKey(expression.GetHashCode()))
+                executedValue.Add(expression.GetHashCode(), returnValue);
             return returnValue;
         }
 

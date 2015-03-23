@@ -1,0 +1,461 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.interlinq.com/2011/03/" elementFormDefault="qualified" targetNamespace="http://schemas.interlinq.com/2011/03/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/System.Linq.Expressions" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/System.Reflection" />
+  <xs:complexType name="SerializableInvocationExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Arguments" nillable="true" type="tns:ArrayOfSerializableExpression" />
+          <xs:element minOccurs="0" name="Expression" nillable="true" type="tns:SerializableExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableInvocationExpression" nillable="true" type="tns:SerializableInvocationExpression" />
+  <xs:complexType name="SerializableExpression">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HashCode" type="xs:int" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/System.Linq.Expressions" minOccurs="0" name="NodeType" type="q1:ExpressionType" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="tns:InterLinqType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SerializableExpression" nillable="true" type="tns:SerializableExpression" />
+  <xs:complexType name="InterLinqType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqMemberInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="GenericArguments" nillable="true" type="tns:ArrayOfInterLinqType" />
+          <xs:element minOccurs="0" name="IsGeneric" type="xs:boolean" />
+          <xs:element minOccurs="0" name="RepresentedType" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqType" nillable="true" type="tns:InterLinqType" />
+  <xs:complexType name="InterLinqMemberInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DeclaringType" nillable="true" type="tns:InterLinqType" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InterLinqMemberInfo" nillable="true" type="tns:InterLinqMemberInfo" />
+  <xs:complexType name="AnonymousMetaType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="MetaProperties" nillable="true" type="tns:ArrayOfAnonymousMetaProperty" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AnonymousMetaType" nillable="true" type="tns:AnonymousMetaType" />
+  <xs:complexType name="ArrayOfAnonymousMetaProperty">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AnonymousMetaProperty" nillable="true" type="tns:AnonymousMetaProperty" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAnonymousMetaProperty" nillable="true" type="tns:ArrayOfAnonymousMetaProperty" />
+  <xs:complexType name="AnonymousMetaProperty">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PropertyType" nillable="true" type="tns:InterLinqType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AnonymousMetaProperty" nillable="true" type="tns:AnonymousMetaProperty" />
+  <xs:complexType name="InterLinqPropertyInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqMemberInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="PropertyType" nillable="true" type="tns:InterLinqType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqPropertyInfo" nillable="true" type="tns:InterLinqPropertyInfo" />
+  <xs:complexType name="InterLinqFieldInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqMemberInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="FieldType" nillable="true" type="tns:InterLinqType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqFieldInfo" nillable="true" type="tns:InterLinqFieldInfo" />
+  <xs:complexType name="InterLinqMethodBase">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqMemberInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ParameterTypes" nillable="true" type="tns:ArrayOfInterLinqType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqMethodBase" nillable="true" type="tns:InterLinqMethodBase" />
+  <xs:complexType name="ArrayOfInterLinqType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InterLinqType" nillable="true" type="tns:InterLinqType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfInterLinqType" nillable="true" type="tns:ArrayOfInterLinqType" />
+  <xs:complexType name="InterLinqConstructorInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqMethodBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqConstructorInfo" nillable="true" type="tns:InterLinqConstructorInfo" />
+  <xs:complexType name="InterLinqMethodInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqMethodBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="GenericArguments" nillable="true" type="tns:ArrayOfInterLinqType" />
+          <xs:element minOccurs="0" name="ReturnType" nillable="true" type="tns:InterLinqType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqMethodInfo" nillable="true" type="tns:InterLinqMethodInfo" />
+  <xs:complexType name="SerializableMemberMemberBinding">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableMemberBinding">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Bindings" nillable="true" type="tns:ArrayOfSerializableMemberBinding" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableMemberMemberBinding" nillable="true" type="tns:SerializableMemberMemberBinding" />
+  <xs:complexType name="SerializableMemberBinding">
+    <xs:sequence>
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/System.Linq.Expressions" minOccurs="0" name="BindingType" type="q2:MemberBindingType" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/System.Reflection" minOccurs="0" name="Member" nillable="true" type="q3:MemberInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SerializableMemberBinding" nillable="true" type="tns:SerializableMemberBinding" />
+  <xs:complexType name="SerializableMemberListBinding">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableMemberBinding">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Initializers" nillable="true" type="tns:ArrayOfSerializableElementInit" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableMemberListBinding" nillable="true" type="tns:SerializableMemberListBinding" />
+  <xs:complexType name="ArrayOfSerializableElementInit">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SerializableElementInit" nillable="true" type="tns:SerializableElementInit" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSerializableElementInit" nillable="true" type="tns:ArrayOfSerializableElementInit" />
+  <xs:complexType name="SerializableElementInit">
+    <xs:sequence>
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/System.Reflection" minOccurs="0" name="AddMethod" nillable="true" type="q4:MethodInfo" />
+      <xs:element minOccurs="0" name="Arguments" nillable="true" type="tns:ArrayOfSerializableExpression" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SerializableElementInit" nillable="true" type="tns:SerializableElementInit" />
+  <xs:complexType name="ArrayOfSerializableExpression">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SerializableExpression" nillable="true" type="tns:SerializableExpression" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSerializableExpression" nillable="true" type="tns:ArrayOfSerializableExpression" />
+  <xs:complexType name="SerializableMemberAssignment">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableMemberBinding">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Expression" nillable="true" type="tns:SerializableExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableMemberAssignment" nillable="true" type="tns:SerializableMemberAssignment" />
+  <xs:complexType name="ArrayOfSerializableMemberBinding">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SerializableMemberBinding" nillable="true" type="tns:SerializableMemberBinding" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSerializableMemberBinding" nillable="true" type="tns:ArrayOfSerializableMemberBinding" />
+  <xs:complexType name="AnonymousObject">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Properties" nillable="true" type="tns:ArrayOfAnonymousProperty" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AnonymousObject" nillable="true" type="tns:AnonymousObject" />
+  <xs:complexType name="ArrayOfAnonymousProperty">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AnonymousProperty" nillable="true" type="tns:AnonymousProperty" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAnonymousProperty" nillable="true" type="tns:ArrayOfAnonymousProperty" />
+  <xs:complexType name="AnonymousProperty">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Value" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AnonymousProperty" nillable="true" type="tns:AnonymousProperty" />
+  <xs:complexType name="SerializableBinaryExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Conversion" nillable="true" type="tns:SerializableLambdaExpression" />
+          <xs:element minOccurs="0" name="IsLiftedToNull" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Left" nillable="true" type="tns:SerializableExpression" />
+          <xs:element minOccurs="0" name="Method" nillable="true" type="tns:InterLinqMethodInfo" />
+          <xs:element minOccurs="0" name="Right" nillable="true" type="tns:SerializableExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableBinaryExpression" nillable="true" type="tns:SerializableBinaryExpression" />
+  <xs:complexType name="SerializableLambdaExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Body" nillable="true" type="tns:SerializableExpression" />
+          <xs:element minOccurs="0" name="Parameters" nillable="true" type="tns:ArrayOfSerializableParameterExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableLambdaExpression" nillable="true" type="tns:SerializableLambdaExpression" />
+  <xs:complexType name="ArrayOfSerializableParameterExpression">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SerializableParameterExpression" nillable="true" type="tns:SerializableParameterExpression" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSerializableParameterExpression" nillable="true" type="tns:ArrayOfSerializableParameterExpression" />
+  <xs:complexType name="SerializableParameterExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableParameterExpression" nillable="true" type="tns:SerializableParameterExpression" />
+  <xs:complexType name="SerializableConditionalExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IfFalse" nillable="true" type="tns:SerializableExpression" />
+          <xs:element minOccurs="0" name="IfTrue" nillable="true" type="tns:SerializableExpression" />
+          <xs:element minOccurs="0" name="Test" nillable="true" type="tns:SerializableExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableConditionalExpression" nillable="true" type="tns:SerializableConditionalExpression" />
+  <xs:complexType name="SerializableConstantExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:anyType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableConstantExpression" nillable="true" type="tns:SerializableConstantExpression" />
+  <xs:complexType name="SerializableExpressionTyped">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableLambdaExpression">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableExpressionTyped" nillable="true" type="tns:SerializableExpressionTyped" />
+  <xs:complexType name="SerializableListInitExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Initializers" nillable="true" type="tns:ArrayOfSerializableElementInit" />
+          <xs:element minOccurs="0" name="NewExpression" nillable="true" type="tns:SerializableNewExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableListInitExpression" nillable="true" type="tns:SerializableListInitExpression" />
+  <xs:complexType name="SerializableNewExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Arguments" nillable="true" type="tns:ArrayOfSerializableExpression" />
+          <xs:element minOccurs="0" name="Constructor" nillable="true" type="tns:InterLinqConstructorInfo" />
+          <xs:element minOccurs="0" name="Members" nillable="true" type="tns:ArrayOfInterLinqMemberInfo" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableNewExpression" nillable="true" type="tns:SerializableNewExpression" />
+  <xs:complexType name="ArrayOfInterLinqMemberInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InterLinqMemberInfo" nillable="true" type="tns:InterLinqMemberInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfInterLinqMemberInfo" nillable="true" type="tns:ArrayOfInterLinqMemberInfo" />
+  <xs:complexType name="SerializableMemberExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Expression" nillable="true" type="tns:SerializableExpression" />
+          <xs:element minOccurs="0" name="Member" nillable="true" type="tns:InterLinqMemberInfo" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableMemberExpression" nillable="true" type="tns:SerializableMemberExpression" />
+  <xs:complexType name="SerializableMemberInitExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Bindings" nillable="true" type="tns:ArrayOfSerializableMemberBinding" />
+          <xs:element minOccurs="0" name="NewExpression" nillable="true" type="tns:SerializableNewExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableMemberInitExpression" nillable="true" type="tns:SerializableMemberInitExpression" />
+  <xs:complexType name="SerializableMethodCallExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Arguments" nillable="true" type="tns:ArrayOfSerializableExpression" />
+          <xs:element minOccurs="0" name="Method" nillable="true" type="tns:InterLinqMethodInfo" />
+          <xs:element minOccurs="0" name="Object" nillable="true" type="tns:SerializableExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableMethodCallExpression" nillable="true" type="tns:SerializableMethodCallExpression" />
+  <xs:complexType name="SerializableNewArrayExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Expressions" nillable="true" type="tns:ArrayOfSerializableExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableNewArrayExpression" nillable="true" type="tns:SerializableNewArrayExpression" />
+  <xs:complexType name="SerializableTypeBinaryExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Expression" nillable="true" type="tns:SerializableExpression" />
+          <xs:element minOccurs="0" name="TypeOperand" nillable="true" type="tns:InterLinqType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableTypeBinaryExpression" nillable="true" type="tns:SerializableTypeBinaryExpression" />
+  <xs:complexType name="SerializableUnaryExpression">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:SerializableExpression">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Method" nillable="true" type="tns:InterLinqMethodInfo" />
+          <xs:element minOccurs="0" name="Operand" nillable="true" type="tns:SerializableExpression" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SerializableUnaryExpression" nillable="true" type="tns:SerializableUnaryExpression" />
+  <xs:complexType name="InterLinqQueryBase">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ElementInterLinqType" nillable="true" type="tns:InterLinqType" />
+      <xs:element minOccurs="0" name="QueryName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="QueryParameters" nillable="true" type="tns:ArrayOfSerializableExpression" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InterLinqQueryBase" nillable="true" type="tns:InterLinqQueryBase" />
+  <xs:complexType name="InterLinqGroupingBase">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="InterLinqGroupingBase" nillable="true" type="tns:InterLinqGroupingBase" />
+  <xs:complexType name="ArrayOfAnonymousObject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AnonymousObject" nillable="true" type="tns:AnonymousObject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAnonymousObject" nillable="true" type="tns:ArrayOfAnonymousObject" />
+  <xs:complexType name="InterLinqQueryOfstring">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="InterLinqQueryOf{0}" Namespace="http://schemas.interlinq.com/2011/03/" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqQueryBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqQueryOfstring" nillable="true" type="tns:InterLinqQueryOfstring" />
+  <xs:complexType name="InterLinqQueryOfCustomer">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="InterLinqQueryOf{0}" Namespace="http://schemas.interlinq.com/2011/03/" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Customer" Namespace="http://schemas.datacontract.org/2004/07/InterLinq.Tests.Entities" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqQueryBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqQueryOfCustomer" nillable="true" type="tns:InterLinqQueryOfCustomer" />
+  <xs:complexType name="InterLinqQueryOfOrder">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="InterLinqQueryOf{0}" Namespace="http://schemas.interlinq.com/2011/03/" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Order" Namespace="http://schemas.datacontract.org/2004/07/InterLinq.Tests.Entities" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqQueryBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqQueryOfOrder" nillable="true" type="tns:InterLinqQueryOfOrder" />
+  <xs:complexType name="InterLinqQueryOfProduct">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="InterLinqQueryOf{0}" Namespace="http://schemas.interlinq.com/2011/03/" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Product" Namespace="http://schemas.datacontract.org/2004/07/InterLinq.Tests.Entities" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqQueryBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqQueryOfProduct" nillable="true" type="tns:InterLinqQueryOfProduct" />
+  <xs:complexType name="InterLinqQueryOfSupplier">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="InterLinqQueryOf{0}" Namespace="http://schemas.interlinq.com/2011/03/" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Supplier" Namespace="http://schemas.datacontract.org/2004/07/InterLinq.Tests.Entities" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:InterLinqQueryBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InterLinqQueryOfSupplier" nillable="true" type="tns:InterLinqQueryOfSupplier" />
+</xs:schema>

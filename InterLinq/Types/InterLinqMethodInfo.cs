@@ -85,12 +85,20 @@ namespace InterLinq.Types
         {
             base.Initialize(memberInfo);
             MethodInfo methodInfo = memberInfo as MethodInfo;
+#if !NETFX_CORE
             ReturnType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(methodInfo.ReturnType);
+#else
+            ReturnType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(methodInfo.ReturnType.GetTypeInfo());
+#endif
             if (methodInfo.IsGenericMethod)
             {
                 foreach (Type genericArgument in methodInfo.GetGenericArguments())
                 {
+#if !NETFX_CORE
                     GenericArguments.Add(InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(genericArgument));
+#else
+                    GenericArguments.Add(InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(genericArgument.GetTypeInfo()));
+#endif
                 }
             }
         }
@@ -113,10 +121,19 @@ namespace InterLinq.Types
                     return tsInstance.GetClrVersion<MethodInfo>(this);
                 }
 
+#if !NETFX_CORE
                 Type declaringType = (Type)DeclaringType.GetClrVersion();
                 Type[] genericArgumentTypes = GenericArguments.Select(p => (Type)p.GetClrVersion()).ToArray();
+#else
+                Type declaringType = ((TypeInfo)DeclaringType.GetClrVersion()).AsType();
+                Type[] genericArgumentTypes = GenericArguments.Select(p => ((TypeInfo)p.GetClrVersion()).AsType()).ToArray();
+#endif
                 MethodInfo foundMethod = null;
+#if !NETFX_CORE
                 foreach (MethodInfo method in declaringType.GetMethods().Where(m => m.Name == Name))
+#else
+                foreach (MethodInfo method in declaringType.GetTypeInfo().GetDeclaredMethods(Name))
+#endif
                 {
                     MethodInfo currentMethod = method;
                     if (currentMethod.IsGenericMethod)
@@ -136,9 +153,17 @@ namespace InterLinq.Types
                         bool allArumentsFit = true;
                         for (int i = 0; i < ParameterTypes.Count && i < currentParameters.Length; i++)
                         {
+#if !NETFX_CORE
                             Type currentArg = (Type)ParameterTypes[i].GetClrVersion();
+#else
+                            Type currentArg = ((TypeInfo)ParameterTypes[i].GetClrVersion()).AsType();
+#endif
                             Type currentParamType = currentParameters[i].ParameterType;
+#if !NETFX_CORE
                             if (!currentParamType.IsAssignableFrom(currentArg))
+#else
+                            if (!currentParamType.GetTypeInfo().IsAssignableFrom(currentArg.GetTypeInfo()))
+#endif
                             {
                                 allArumentsFit = false;
                                 break;

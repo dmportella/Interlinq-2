@@ -26,7 +26,7 @@ namespace InterLinq.Tests.Server.Services
                 typeof(Customer),
                 typeof(Order),
                 typeof(Product),
-                typeof(Supplier)
+                typeof(Supplier),
             };
 
             coreTypes.ForEach(type =>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -62,7 +63,11 @@ namespace InterLinq.Types
         {
             base.Initialize(memberInfo);
             FieldInfo fieldInfo = memberInfo as FieldInfo;
+#if !NETFX_CORE
             FieldType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(fieldInfo.FieldType);
+#else
+            FieldType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(fieldInfo.FieldType.GetTypeInfo());
+#endif
         }
 
         #endregion
@@ -83,8 +88,13 @@ namespace InterLinq.Types
                     return tsInstance.GetClrVersion<FieldInfo>(this);
                 }
 
+#if !NETFX_CORE
                 Type declaringType = (Type)DeclaringType.GetClrVersion();
                 FieldInfo foundField = declaringType.GetField(Name);
+#else
+                Type declaringType = ((TypeInfo)DeclaringType.GetClrVersion()).AsType();
+                FieldInfo foundField = declaringType.GetTypeInfo().DeclaredFields.FirstOrDefault(x => x.Name == Name);
+#endif
                 tsInstance.SetClrVersion(this, foundField);
                 return foundField;
             }

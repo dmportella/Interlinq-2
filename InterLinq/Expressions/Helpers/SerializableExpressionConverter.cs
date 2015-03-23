@@ -81,9 +81,28 @@ namespace InterLinq.Expressions.Helpers
         {
             if (expression.Value != null)
             {
+                var t = expression.Value.GetType();
+#if !NETFX_CORE
+                if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof (InterLinqQuery<>))
+#else
+                if (t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(InterLinqQuery<>))
+#endif
+                {
+                    var qry = expression.Value as InterLinqQueryBase;
+                    var newQry = this.QueryHandler.Get(qry.ElementType, qry.AdditionalObject, qry.QueryName, sessionObject, qry.Parameters);
+                    return Expression.Constant(newQry);
+                }
+#if !NETFX_CORE
                 return Expression.Constant(expression.Value, expression.Type.GetClrVersion() as Type);
+#else
+                return Expression.Constant(expression.Value, ((TypeInfo)expression.Type.GetClrVersion()).AsType());
+#endif
             }
+#if !NETFX_CORE
             return Expression.Constant(null, (Type)expression.Type.GetClrVersion());
+#else
+            return Expression.Constant(null, ((TypeInfo)expression.Type.GetClrVersion()).AsType());
+#endif
         }
 
         /// <summary>
@@ -168,9 +187,17 @@ namespace InterLinq.Expressions.Helpers
         {
             if (expression.NodeType == ExpressionType.NewArrayBounds)
             {
+#if !NETFX_CORE
                 return Expression.NewArrayBounds((Type)expression.Type.GetClrVersion(), VisitCollection<Expression>(expression.Expressions));
+#else
+                return Expression.NewArrayBounds(((TypeInfo)expression.Type.GetClrVersion()).AsType(), VisitCollection<Expression>(expression.Expressions));
+#endif
             }
+#if !NETFX_CORE
             Type t = (Type)expression.Type.GetClrVersion();
+#else
+            Type t = ((TypeInfo)expression.Type.GetClrVersion()).AsType();
+#endif
             // Expression must be an Array
             Debug.Assert(t.HasElementType);
 
@@ -198,7 +225,11 @@ namespace InterLinq.Expressions.Helpers
         /// <returns>Returns the converted <see cref="Expression"/>.</returns>
         protected override Expression VisitSerializableParameterExpression(SerializableParameterExpression expression)
         {
+#if !NETFX_CORE
             return Expression.Parameter((Type)expression.Type.GetClrVersion(), expression.Name);
+#else
+            return Expression.Parameter(((TypeInfo)expression.Type.GetClrVersion()).AsType(), expression.Name);
+#endif
         }
 
         /// <summary>
@@ -208,7 +239,11 @@ namespace InterLinq.Expressions.Helpers
         /// <returns>Returns the converted <see cref="Expression"/>.</returns>
         protected override Expression VisitSerializableTypeBinaryExpression(SerializableTypeBinaryExpression expression)
         {
+#if !NETFX_CORE
             return Expression.TypeIs(Visit(expression.Expression), (Type)expression.TypeOperand.GetClrVersion());
+#else
+            return Expression.TypeIs(Visit(expression.Expression), ((TypeInfo)expression.TypeOperand.GetClrVersion()).AsType());
+#endif
         }
 
         /// <summary>
@@ -219,7 +254,11 @@ namespace InterLinq.Expressions.Helpers
         protected override Expression VisitSerializableUnaryExpression(SerializableUnaryExpression expression)
         {
             Expression operand = Visit(expression.Operand);
+#if !NETFX_CORE
             Type type = (Type)expression.Type.GetClrVersion();
+#else
+            Type type = ((TypeInfo)expression.Type.GetClrVersion()).AsType();
+#endif
             MethodInfo method = expression.Method != null ? (MethodInfo)expression.Method.GetClrVersion() : null;
             return Expression.MakeUnary(expression.NodeType, operand, type, method);
         }
@@ -281,13 +320,13 @@ namespace InterLinq.Expressions.Helpers
         #endregion
 
         #region Get result
-
+     
         /// <summary>
         /// Executes a <see cref="SerializableConstantExpression"/> and returns the result.
         /// </summary>
         /// <param name="expression"><see cref="SerializableConstantExpression"/> to convert.</param>
         /// <returns>Returns the result of a <see cref="SerializableConstantExpression"/>.</returns>
-        protected override object GetResultConstantExpression(SerializableConstantExpression expression)
+        protected override object GetResultConstantExpression(SerializableConstantExpression expression, object sessionObject)
         {
             if (expression.Value == null)
             {
@@ -299,7 +338,12 @@ namespace InterLinq.Expressions.Helpers
                 
                 Type type = ((InterLinqQueryBase)expression.Value).ElementType;
 
-                return QueryHandler.Get(type, baseQuery.QueryName, (!string.IsNullOrEmpty(baseQuery.QueryName) && baseQuery.QueryParameters != null && baseQuery.QueryParameters.Count != 0) ? baseQuery.QueryParameters.Select(s => VisitResult(s)).ToArray() : null);
+                return QueryHandler.Get(type, baseQuery.AdditionalObject, baseQuery.QueryName, sessionObject,
+                    (!string.IsNullOrEmpty(baseQuery.QueryName) && baseQuery.QueryParameters != null &&
+                     baseQuery.QueryParameters.Count != 0)
+                        ? baseQuery.QueryParameters.Select(s => VisitResult(s, sessionObject)).ToArray()
+                        : baseQuery.Parameters);
+                //return QueryHandler.Get(type, baseQuery.AdditionalObject, baseQuery.QueryName, sessionObject, (!string.IsNullOrEmpty(baseQuery.QueryName) && baseQuery.QueryParameters != null && baseQuery.QueryParameters.Count != 0) ? baseQuery.QueryParameters.Select(s => VisitResult(s, sessionObject)).ToArray() : null);
             }
             return expression.Value;
         }
@@ -309,9 +353,9 @@ namespace InterLinq.Expressions.Helpers
         /// </summary>
         /// <param name="expression"><see cref="SerializableMethodCallExpression"/> to convert.</param>
         /// <returns>Returns the result of a <see cref="SerializableMethodCallExpression"/>.</returns>
-        protected override object GetResultMethodCallExpression(SerializableMethodCallExpression expression)
+        protected override object GetResultMethodCallExpression(SerializableMethodCallExpression expression, object sessionObject)
         {
-            return InvokeMethodCall(expression);
+            return InvokeMethodCall(expression, sessionObject);
         }
 
         #endregion
@@ -323,27 +367,48 @@ namespace InterLinq.Expressions.Helpers
         /// </summary>
         /// <param name="ex"><see cref="SerializableMethodCallExpression"/> to invoke.</param>
         /// <returns>Returns the return value of the method call in <paramref name="ex"/>.</returns>
-        protected object InvokeMethodCall(SerializableMethodCallExpression ex)
+        protected object InvokeMethodCall(SerializableMethodCallExpression ex, object sessionObject)
         {
+            //this.sessionObject = sessionObject;
+
+#if !NETFX_CORE
             if (ex.Method.DeclaringType.GetClrVersion() == typeof(Queryable))
+#else
+            if (((TypeInfo)ex.Method.DeclaringType.GetClrVersion()).AsType() == typeof(Queryable))
+#endif
             {
                 List<object> args = new List<object>();
+#if !NETFX_CORE
                 Type[] parameterTypes = ex.Method.ParameterTypes.Select(p => (Type)p.GetClrVersion()).ToArray();
+#else
+                Type[] parameterTypes = ex.Method.ParameterTypes.Select(p => ((TypeInfo)p.GetClrVersion()).AsType()).ToArray();
+#endif
                 for (int i = 0; i < ex.Arguments.Count && i < parameterTypes.Length; i++)
                 {
                     SerializableExpression currentArg = ex.Arguments[i];
                     Type currentParameterType = parameterTypes[i];
+#if !NETFX_CORE
                     if (typeof(Expression).IsAssignableFrom(currentParameterType))
+#else
+                    if (typeof(Expression).GetTypeInfo().IsAssignableFrom(currentParameterType.GetTypeInfo()))
+#endif
                     {
                         args.Add(((UnaryExpression)Visit(currentArg)).Operand);
                     }
                     else
                     {
-                        args.Add(VisitResult(currentArg));
+                        args.Add(VisitResult(currentArg, sessionObject));
                     }
                 }
-                return ((MethodInfo)ex.Method.GetClrVersion()).Invoke(ex.Object, args.ToArray());
+
+                var ret = ((MethodInfo) ex.Method.GetClrVersion()).Invoke(ex.Object, args.ToArray());
+
+                //this.sessionObject = null;
+
+                return ret;
             }
+
+            //this.sessionObject = null;
 
             // If the method is not of DeclaringType "Queryable", it mustn't be invoked.
             // Without this check, we were able to delete files from the server disk

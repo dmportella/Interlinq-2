@@ -82,7 +82,11 @@ namespace InterLinq.Types.Anonymous
         public AnonymousMetaType(Type anonymousType)
         {
             MetaProperties = new List<AnonymousMetaProperty>();
+#if !NETFX_CORE
             Initialize(anonymousType);
+#else
+            Initialize(anonymousType.GetTypeInfo());
+#endif
         }
 
         /// <summary>
@@ -91,13 +95,21 @@ namespace InterLinq.Types.Anonymous
         /// <param name="memberInfo">The <see cref="Type"/> to generate the <see cref="AnonymousMetaType"/> from.</param>
         public override void Initialize(MemberInfo memberInfo)
         {
+#if !NETFX_CORE
             Type representedType = memberInfo as Type;
+#else
+            Type representedType = ((TypeInfo)memberInfo).AsType();
+#endif
             if (representedType == null)
             {
                 throw new ArgumentException("Not of Type 'Type'", "memberInfo");
             }
             Name = representedType.Name;
+#if !NETFX_CORE
             foreach (PropertyInfo property in representedType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty))
+#else
+            foreach (PropertyInfo property in ((TypeInfo)memberInfo).DeclaredProperties)
+#endif
             {
                 MetaProperties.Add(new AnonymousMetaProperty(property));
             }
@@ -117,7 +129,11 @@ namespace InterLinq.Types.Anonymous
         /// <returns>Returns the generated <see cref="Type"/>.</returns>
         protected override Type CreateClrType()
         {
+#if !NETFX_CORE
             return GenerateAnonymousType(DynamicAssemblyHolder.Instance.ModuleBuilder);
+#else
+            return null;
+#endif
         }
 
         /// <summary>
@@ -162,6 +178,7 @@ namespace InterLinq.Types.Anonymous
             return num ^ base.GetHashCode();
         }
 
+#if !NETFX_CORE
         #region + CIL Generation
 
         /// <summary>
@@ -471,8 +488,7 @@ namespace InterLinq.Types.Anonymous
         }
 
         #endregion
-
+#endif
         #endregion
-
     }
 }

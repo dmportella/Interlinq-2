@@ -53,10 +53,12 @@ namespace InterLinq.Expressions.Helpers
         /// returns the converted <see cref="Expression"/>.
         /// </summary>
         /// <returns>Returns the converted <see cref="Expression"/>.</returns>
-        public object Visit()
+        public object Visit(object sessionObject)
         {
+            this.sessionObject = sessionObject;
+
             convertedObjects = new Dictionary<int, object>();
-            return VisitResult(ExpressionToConvert);
+            return VisitResult(ExpressionToConvert, sessionObject);
         }
 
         /// <summary>
@@ -72,7 +74,8 @@ namespace InterLinq.Expressions.Helpers
             }
             if (convertedObjects.ContainsKey(expression.HashCode))
             {
-                return (Expression)convertedObjects[expression.HashCode];
+                if (convertedObjects[expression.HashCode] is Expression)
+                    return (Expression)convertedObjects[expression.HashCode];
             }
 
             Expression returnValue;
@@ -100,9 +103,17 @@ namespace InterLinq.Expressions.Helpers
 #if !SILVERLIGHT
                     MethodInfo executeMethod = GetType().GetMethod("VisitSerializableExpressionTyped", BindingFlags.NonPublic | BindingFlags.Instance);
 #else
+#if !NETFX_CORE
 					MethodInfo executeMethod = GetType().GetMethod("VisitSerializableExpressionTyped", BindingFlags.Public | BindingFlags.Instance);
+#else
+                    MethodInfo executeMethod = GetType().GetTypeInfo().GetDeclaredMethod("VisitSerializableExpressionTyped");
 #endif
+#endif
+#if !NETFX_CORE
                     MethodInfo genericExecuteMethod = executeMethod.MakeGenericMethod(new[] { (Type)expression.Type.GetClrVersion() });
+#else
+                    MethodInfo genericExecuteMethod = executeMethod.MakeGenericMethod(new[] { ((TypeInfo)expression.Type.GetClrVersion()).AsType() });
+#endif
                     returnValue = (Expression)genericExecuteMethod.Invoke(this, new object[] { expression });
                 }
                 else
@@ -151,7 +162,9 @@ namespace InterLinq.Expressions.Helpers
                 returnValue = VisitUnknownSerializableExpression(expression);
             }
 
-            convertedObjects.Add(expression.HashCode, returnValue);
+            if (!convertedObjects.ContainsKey(expression.HashCode))
+                convertedObjects.Add(expression.HashCode, returnValue);
+
             return returnValue;
         }
 
@@ -243,12 +256,13 @@ namespace InterLinq.Expressions.Helpers
 
         #endregion
 
+        protected object sessionObject;
         /// <summary>
         /// Returns the value of the <see cref="Expression"/>.
         /// </summary>
         /// <param name="expression"><see cref="Expression"/> to visit.</param>
         /// <returns>Returns the value of the <see cref="Expression"/>.</returns>
-        public object VisitResult(SerializableExpression expression)
+        public object VisitResult(SerializableExpression expression, object sessionObject)
         {
             if (expression == null)
             {
@@ -263,17 +277,19 @@ namespace InterLinq.Expressions.Helpers
 
             if (expression is SerializableConstantExpression)
             {
-                foundObject = GetResultConstantExpression((SerializableConstantExpression)expression);
+                foundObject = GetResultConstantExpression((SerializableConstantExpression)expression, sessionObject);
             }
             else if (expression is SerializableMethodCallExpression)
             {
-                foundObject = GetResultMethodCallExpression((SerializableMethodCallExpression)expression);
+                foundObject = GetResultMethodCallExpression((SerializableMethodCallExpression)expression, sessionObject);
             }
             else
             {
                 throw new NotImplementedException();
             }
+
             convertedObjects[expression.HashCode] = foundObject;
+
             return foundObject;
         }
 
@@ -434,14 +450,14 @@ namespace InterLinq.Expressions.Helpers
         /// </summary>
         /// <param name="expression"><see cref="SerializableConstantExpression"/> to convert.</param>
         /// <returns>Returns the result of a <see cref="SerializableConstantExpression"/>.</returns>
-        protected abstract object GetResultConstantExpression(SerializableConstantExpression expression);
+        protected abstract object GetResultConstantExpression(SerializableConstantExpression expression, object sessionObject);
 
         /// <summary>
         /// Executes a <see cref="SerializableMethodCallExpression"/> and returns the result.
         /// </summary>
         /// <param name="expression"><see cref="SerializableMethodCallExpression"/> to convert.</param>
         /// <returns>Returns the result of a <see cref="SerializableMethodCallExpression"/>.</returns>
-        protected abstract object GetResultMethodCallExpression(SerializableMethodCallExpression expression);
+        protected abstract object GetResultMethodCallExpression(SerializableMethodCallExpression expression, object sessionObject);
 
         #endregion
 

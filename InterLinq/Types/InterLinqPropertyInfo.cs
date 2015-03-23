@@ -63,7 +63,11 @@ namespace InterLinq.Types
         {
             base.Initialize(memberInfo);
             PropertyInfo propertyInfo = memberInfo as PropertyInfo;
+#if !NETFX_CORE
             PropertyType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(propertyInfo.PropertyType);
+#else
+            PropertyType = InterLinqTypeSystem.Instance.GetInterLinqVersionOf<InterLinqType>(propertyInfo.PropertyType.GetTypeInfo());
+#endif
         }
 
         #endregion
@@ -84,8 +88,13 @@ namespace InterLinq.Types
                     return tsInstance.GetClrVersion<PropertyInfo>(this);
                 }
 
+#if !NETFX_CORE
                 Type declaringType = (Type)DeclaringType.GetClrVersion();
                 PropertyInfo foundProperty = declaringType.GetProperty(Name);
+#else
+                Type declaringType = ((TypeInfo)DeclaringType.GetClrVersion()).AsType();
+                PropertyInfo foundProperty = declaringType.GetTypeInfo().GetDeclaredProperty(Name);
+#endif
                 tsInstance.SetClrVersion(this, foundProperty);
                 return foundProperty;
             }

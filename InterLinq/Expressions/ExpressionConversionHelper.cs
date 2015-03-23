@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using InterLinq.Expressions.Helpers;
+using System;
 
 namespace InterLinq.Expressions
 {
@@ -13,6 +14,7 @@ namespace InterLinq.Expressions
     /// <seealso cref="IEnumerable"/>
     public static class ExpressionConversionHelper
     {
+        public static Func<Expression, Expression> ExpressionConverterBeforeSerialization;
 
         /// <summary>
         /// Extension Method for <see cref="Expression"/>.
@@ -22,6 +24,9 @@ namespace InterLinq.Expressions
         /// <returns>Returns the converted <see cref="SerializableExpression"/>.</returns>
         public static SerializableExpression MakeSerializable(this Expression exp)
         {
+            if (ExpressionConverterBeforeSerialization != null)
+                exp = ExpressionConverterBeforeSerialization(exp);
+
             return new ExpressionConverter(exp).Visit() as SerializableExpression;
         }
 
@@ -70,9 +75,9 @@ namespace InterLinq.Expressions
         /// <param name="exp">Extended class instance.</param>
         /// <param name="linqHandler"><see cref="IQueryHandler"/>.</param>
         /// <returns>Returns the result of the executed <see cref="SerializableExpression"/>.</returns>
-        public static object Convert(this SerializableExpression exp, IQueryHandler linqHandler)
+        public static object Convert(this SerializableExpression exp, IQueryHandler linqHandler, object sessionObject)
         {
-            return new SerializableExpressionConverter(exp, linqHandler).Visit();
+            return new SerializableExpressionConverter(exp, linqHandler).Visit(sessionObject);
         }
 
     }

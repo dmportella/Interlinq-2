@@ -63,11 +63,16 @@ namespace InterLinq
         /// </summary>
         /// <typeparam name="T">The entity type expected.</typeparam>
         /// <param name="name">The name of the query.</param>
-        /// <param name="parameters">A list of Expression parameters to be passed into the query.</param>
+        /// <param name="parameters">A list of parameters to be passed.</param>
         /// <returns>The result of the query.</returns>
-        public IQueryable<T> ExecuteMethod<T>(string name, params System.Linq.Expressions.Expression[] parameters) where T: class
+        public IQueryable<T> ExecuteMethod<T>(object additionalObject, string name, params object[] parameters) where T: class
         {
-            return this.QueryHandler.Get<T>(name, parameters);
+            return this.QueryHandler.Get<T>(additionalObject, name, null, parameters);
+        }
+
+        public IQueryable ExecuteMethod(Type type, object additionalObject, string name, params object[] parameters)
+        {
+            return this.QueryHandler.Get(type, additionalObject, name, null, parameters);
         }
     }
 }

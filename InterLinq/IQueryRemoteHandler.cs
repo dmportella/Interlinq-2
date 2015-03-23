@@ -49,8 +49,16 @@ namespace InterLinq
         ///     containing selection and projection.
         /// </param>
         /// <returns>Returns requested data.</returns>
+#if !SILVERLIGHT        
         [OperationContract]
         [FaultContract(typeof(Exception))]
         object Retrieve(SerializableExpression expression);
+#else
+        [OperationContract(AsyncPattern = true)]
+        [FaultContract(typeof(Exception))]
+        IAsyncResult BeginRetrieve(SerializableExpression expression, AsyncCallback callback, object state);
+
+        object EndRetrieve(IAsyncResult result);
+#endif
     }
 }

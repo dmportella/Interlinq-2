@@ -75,9 +75,9 @@ namespace InterLinq.EntityFramework4
         /// </summary>
         /// <returns>True, if the session creation was successful. False, if not.</returns>
         /// <seealso cref="IQueryHandler.StartSession"/>
-        public bool StartSession()
+        public object StartSession()
         {
-            return true;
+            return new object();
         }
 
         /// <summary>
@@ -85,20 +85,20 @@ namespace InterLinq.EntityFramework4
         /// </summary>
         /// <returns>True, if the session closing was successful. False, if not.</returns>
         /// <seealso cref="IQueryHandler.CloseSession"/>
-        public bool CloseSession()
+        public bool CloseSession(object sessionObject)
         {
             return true;
         }
 
         #endregion
-        
-        public IQueryable Get(Type type, string queryName, params object[] parameters)
+
+        public IQueryable Get(Type type, object additionalObject, string queryName, object sessionObject, params object[] parameters)
         {
             MethodInfo genericGetTableMethod = getNamedQueryMethod.MakeGenericMethod(type);
             return (IQueryable)genericGetTableMethod.Invoke(this, new object[] { queryName, parameters });
         }
 
-        public IQueryable<T> Get<T>(string queryName, params object[] parameters) where T : class
+        public IQueryable<T> Get<T>(object additionalObject, string queryName, object sessionObject, params object[] parameters) where T : class
         {
             return this.objectContext.ExecuteStoreQuery<T>(queryName, parameters).AsQueryable();
         }
